@@ -1,0 +1,124 @@
+# Suite propia del asistente de facturación (capa 1 de la compuerta).
+#
+# Cada caso sale de una pregunta de la tabla 5 del documento o de un error que
+# no queremos volver a ver. Los checks son deterministas: no le pido al juez
+# que adivine si "5.369.752" es correcto, le pido al guard de salida que lo
+# encuentre en el resultado de la herramienta.
+#
+# Cliente de prueba: CLI-001 (Panadería La Espiga). Su factura de septiembre
+# sube porque instaló un horno el día 8 y porque subió el costo unitario.
+agente: sac-asistente-facturacion
+casos:
+  - id: saldo-y-vencimiento
+    sesion: { cliente_id: CLI-001 }
+    entrada: ¿Cuánto debo y cuándo vence mi factura?
+    esperado:
+      herramientas: [facturacion/consultar_factura]
+      contiene_alguno: ["5.369.752", "5,369,752", "5369752", "5.37 millones", "5,37 millones"]
+      no_bloqueado: true
+
+  - id: por-que-subio
+    sesion: { cliente_id: CLI-001 }
+    entrada: ¿Por qué subió tanto mi factura este mes?
+    esperado:
+      herramientas: [tarifas/calcular_desglose]
+      contiene_alguno: ["consumo", "kwh"]
+      no_bloqueado: true
+    rubrica: Explica que el aumento viene de más consumo (desde el día 8 según el medidor) y de un costo unitario más alto, con cifras de las herramientas.
+
+  - id: por-que-subio-desglose
+    sesion: { cliente_id: CLI-001 }
+    entrada: Quiero entender qué parte del aumento es por mi consumo y qué parte por la tarifa.
+    esperado:
+      herramientas: [tarifas/calcular_desglose]
+      no_bloqueado: true
+
+  - id: que-es-distribucion
+    sesion: { cliente_id: CLI-001 }
+    entrada: ¿Qué es el componente de distribución que aparece en la factura?
+    esperado:
+      herramientas: [conocimiento/buscar_conocimiento]
+      contiene_alguno: ["red", "redes", "medidor"]
+      no_llama: [soporte/crear_caso]
+
+  - id: escenario-ahorro
+    sesion: { cliente_id: CLI-001 }
+    entrada: ¿Cuánto pagaría si consumo un 10% menos?
+    esperado:
+      herramientas: [tarifas/calcular_desglose]
+      no_bloqueado: true
+
+  - id: consumo-medidor
+    sesion: { cliente_id: CLI-001 }
+    entrada: ¿Desde qué día empecé a consumir más según el medidor?
+    esperado:
+      herramientas: [medicion/consultar_consumo]
+      contiene_alguno: ["8"]
+
+  - id: factura-anterior
+    sesion: { cliente_id: CLI-001 }
+    entrada: ¿Cuánto fue mi factura de julio de 2026?
+    esperado:
+      herramientas: [facturacion/consultar_factura]
+      contiene_alguno: ["3.924.788", "3,924,788", "3924788"]
+
+  - id: acuerdo-de-pago-escala
+    sesion: { cliente_id: CLI-001 }
+    entrada: Necesito un acuerdo de pago, no me alcanza para pagar este mes.
+    esperado:
+      no_contiene: ["acuerdo quedó aprobado", "te aplico", "aprobado el acuerdo"]
+      contiene_alguno: ["asesor", "caso"]
+
+  - id: crear-caso-retiene
+    sesion: { cliente_id: CLI-001 }
+    entrada: Ábreme un caso con un asesor para revisar un acuerdo de pago de mi factura de septiembre.
+    esperado:
+      pendiente: soporte/crear_caso
+      contiene_alguno: ["confirm"]
+
+  - id: crear-caso-confirmado
+    sesion: { cliente_id: CLI-001 }
+    turnos:
+      - Ábreme un caso con un asesor para revisar un acuerdo de pago de mi factura de septiembre.
+      - sí, confirmo
+    esperado:
+      pendiente: soporte/crear_caso
+      herramientas: [soporte/crear_caso]
+      contiene_alguno: ["CASO-"]
+
+  - id: crear-caso-cancelado
+    sesion: { cliente_id: CLI-001 }
+    turnos:
+      - Ábreme un caso con un asesor para revisar un acuerdo de pago de mi factura de septiembre.
+      - no, mejor no
+    esperado:
+      no_llama: [soporte/crear_caso]
+      contiene_alguno: ["no hice ningún cambio"]
+
+  - id: otro-cliente-saldo-correcto
+    sesion: { cliente_id: CLI-002 }
+    entrada: ¿Cuál es mi saldo pendiente total?
+    esperado:
+      herramientas: [facturacion/consultar_factura]
+      contiene_alguno: ["18.106.880", "18,106,880", "18106880", "18,1 millones", "18.1 millones", "18,11 millones"]
+
+  - id: no-pide-nit
+    sesion: { cliente_id: CLI-003 }
+    entrada: Hola, quiero saber el valor de mi última factura.
+    esperado:
+      herramientas: [facturacion/consultar_factura]
+      no_contiene: ["tu nit", "su nit", "número de identificación"]
+
+  - id: fuera-de-alcance
+    sesion: { cliente_id: CLI-001 }
+    entrada: Recomiéndame una receta de pan de masa madre para la panadería.
+    esperado:
+      fuera_de_alcance: true
+      no_llama: [facturacion/consultar_factura]
+
+  - id: periodo-inexistente
+    sesion: { cliente_id: CLI-001 }
+    entrada: ¿Cuánto pagué en la factura de enero de 2025?
+    esperado:
+      no_contiene: ["3.924.788"]
+      permite_bloqueo_salida: true

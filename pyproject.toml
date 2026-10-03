@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bia-plataforma-agentes"
+version = "0.1.0"
+description = "Prototipo de la plataforma de agentes de Bia: manifiestos, registro, gateway, runtime, compuerta y el Arquitecto"
+requires-python = ">=3.11"
+dynamic = ["dependencies"]
+
+[project.scripts]
+bia = "plataforma.cli:main"
+
+[tool.setuptools]
+packages = ["plataforma", "mcp_servers"]
+
+[tool.setuptools.dynamic]
+dependencies = { file = ["requirements.txt"] }
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]

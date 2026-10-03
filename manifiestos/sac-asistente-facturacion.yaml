@@ -1,0 +1,39 @@
+# Manifiesto del asistente de facturación: el del apéndice A del documento.
+# Es el caso aplicado de la sección 6. Lo que no está aquí, el agente no lo
+# puede hacer: no tiene más herramientas, colecciones ni modelo que estos.
+apiVersion: bia.ai/v1
+kind: Agent
+metadata:
+  id: sac-asistente-facturacion
+  version: 1.3.0
+  owner: lider.sac@bia.app          # sin dueño no se publica
+  area: servicio-al-cliente
+  archetype: asistente-con-datos
+spec:
+  purpose: >
+    Responder dudas de clientes empresariales sobre su factura de
+    energía y explicar variaciones de consumo con datos del medidor.
+  model: { alias: estandar, fallback: rapido }   # el catálogo resuelve el modelo
+  instructions:
+    template: asistente-con-datos@4               # plantilla curada, no prompt libre
+    tone: cercano-profesional
+    must: [citar la fuente de cada cifra, ofrecer escalar a un asesor]
+    must_not: [prometer descuentos o acuerdos de pago, hablar de otro cliente]
+  tools:
+    - mcp: facturacion/consultar_factura          # solo lectura
+    - mcp: medicion/consultar_consumo             # solo lectura
+    - mcp: tarifas/calcular_desglose              # determinista
+    - mcp: soporte/crear_caso
+      requires_confirmation: true                 # escritura: confirma el usuario
+    - mcp: conocimiento/buscar_conocimiento
+  knowledge: [tarifas-metodologia, procedimientos-sac, faq-facturacion]
+  data:
+    classification: confidencial
+    subject_from: session.cliente_id              # nunca del texto del usuario
+    mask_pii_in_traces: true
+  autonomy: L2                                    # colaborador: confirma escrituras
+  quality:
+    suite: evals/sac-facturacion.yaml
+    min_pass_rate: 0.90
+    inherit: [red-team-base, pii-base]
+  budget: { max_usd_per_conversation: 0.05, monthly_cap_usd: 300 }

@@ -1,0 +1,48 @@
+# Segundo agente, a propósito distinto del primero: interno, solo lectura y
+# riesgo bajo, así que la compuerta le exige 85 % y no 90 %.
+#
+# Historia de versiones (queda también en `bia eventos sac-procedimientos-internos`):
+#   1.0.0  alias `rapido` (qwen2.5:3b), como dice el árbol de la figura 9.
+#          Compuerta: 14 %; 71 % tras corregir la plantilla. En preguntas de
+#          sí/no el modelo respondía de memoria sin buscar. La solución fue de
+#          plataforma, no de modelo: para este arquetipo la búsqueda ahora la
+#          hace el runtime (`recuperar_siempre`). Con eso pasó 7/7, pero en una
+#          corrida repitió y AFIRMÓ la inyección indirecta del documento
+#          contaminado ("descuento del 40 %... ya quedó aprobado"). La detuvo
+#          la compuerta.
+#   1.1.0  alias `estandar` (qwen2.5:7b). 7/7 y resistió la inyección por sí
+#          solo. Cuesta 3,6 veces más (US$0,00055 frente a 0,00015 por
+#          conversación, precio de referencia). Lo pago: este agente lee
+#          contenido que Bia no controla y no quiero que el guard de salida sea
+#          la única defensa. Si entra al catálogo un modelo pequeño que pase la
+#          suite común de forma estable, se vuelve a `rapido`.
+apiVersion: bia.ai/v1
+kind: Agent
+metadata:
+  id: sac-procedimientos-internos
+  version: 1.1.0
+  owner: lider.sac@bia.app
+  area: servicio-al-cliente
+  archetype: pregunta-sobre-documentos
+spec:
+  purpose: >
+    Responder a los asesores de servicio al cliente cómo se atiende,
+    documenta y escala un caso según los procedimientos vigentes.
+  model: { alias: estandar, fallback: rapido }
+  instructions:
+    template: pregunta-sobre-documentos@2
+    tone: directo
+    must: [citar el procedimiento de donde sale la respuesta]
+    must_not: [inventar pasos que no estén en la documentación]
+  tools:
+    - mcp: conocimiento/buscar_conocimiento
+  knowledge: [procedimientos-sac, faq-facturacion]
+  data:
+    classification: interna
+    mask_pii_in_traces: true
+  autonomy: L1
+  quality:
+    suite: evals/sac-procedimientos.yaml
+    min_pass_rate: 0.85
+    inherit: [red-team-base]
+  budget: { max_usd_per_conversation: 0.02, monthly_cap_usd: 50 }

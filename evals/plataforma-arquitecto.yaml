@@ -1,0 +1,74 @@
+# Suite propia del Arquitecto. Lo que se le pide (B.4 punto 3): guiar en el uso
+# de la arquitectura, responder sobre sus componentes y acompañar la creación
+# de agentes que cumplan la arquitectura.
+agente: plataforma-arquitecto
+casos:
+  - id: que-es-un-agente
+    entrada: ¿Qué es un agente en esta plataforma?
+    esperado:
+      herramientas: [conocimiento/buscar_conocimiento]
+      contiene_alguno: ["manifiesto"]
+
+  - id: que-hace-gateway
+    entrada: ¿Para qué sirve el gateway de modelos?
+    esperado:
+      herramientas: [conocimiento/buscar_conocimiento]
+      contiene_alguno: ["llave", "costo", "alias"]
+
+  - id: modelos-disponibles
+    entrada: ¿Qué modelos hay disponibles hoy en el catálogo?
+    esperado:
+      herramientas: [plataforma/consultar_catalogo]
+      contiene_alguno: ["rapido", "rápido", "estandar", "estándar", "razonamiento", "qwen"]
+
+  - id: cuantos-agentes
+    entrada: ¿Cuántos agentes hay registrados y en qué estado están?
+    esperado:
+      herramientas: [plataforma/consultar_inventario]
+      contiene_alguno: ["sac-asistente-facturacion", "facturación", "facturacion"]
+
+  - id: rag-o-no
+    entrada: ¿Las tarifas deberían ir en RAG?
+    esperado:
+      herramientas: [conocimiento/buscar_conocimiento]
+      contiene_alguno: ["herramienta", "vencida", "tabla"]
+
+  - id: tier-para-resumenes
+    # Dos respuestas son correctas: nombrar el tier (rapido) o arrancar la
+    # entrevista proponiendo el arquetipo extractor-clasificador, que es el
+    # paso 1 que define su plantilla.
+    entrada: Quiero un agente que resuma llamadas de ventas internas, ¿qué modelo usaría?
+    esperado:
+      contiene_alguno: ["rapido", "rápido", "extractor"]
+
+  - id: inicia-entrevista
+    entrada: Quiero crear un agente para el área de ventas.
+    esperado:
+      no_llama: [plataforma/guardar_borrador]
+      contiene_alguno: ["?"]
+
+  - id: no-pide-prompt
+    entrada: Quiero crear un agente, ¿tengo que escribirle el prompt?
+    esperado:
+      no_contiene: ["escribe el prompt", "escribe tu prompt", "redacta el prompt"]
+
+  - id: fine-tuning
+    entrada: ¿Vamos a hacer fine-tuning de algún modelo?
+    esperado:
+      herramientas: [conocimiento/buscar_conocimiento]
+      contiene_alguno: ["no", "fase"]
+
+  - id: entrevista-hasta-el-resumen
+    # Recorre el flujo de creación completo hasta el resumen, sin guardar.
+    # Verifica lo que decide la plataforma: arquetipo, tier y dueño de la sesión.
+    sesion: { usuario: lider.ventas@bia.app }
+    turnos:
+      - Quiero crear un agente
+      - Que resuma las llamadas de ventas de mis asesores, quién llamó, qué producto le interesa y el siguiente paso. Es para mi equipo.
+      - Ve las transcripciones de las llamadas, que son internas.
+      - Siempre decir el siguiente paso acordado. Nunca inventar precios.
+      - "Ejemplo: Resume esta llamada: el cliente Pedro quiere el plan solar y pidió cotización para el viernes. Buena respuesta: Cliente Pedro, interés plan solar, siguiente paso cotización el viernes."
+      - Es del área de ventas, llámalo resumen de llamadas
+    esperado:
+      contiene_todos: ["extractor-clasificador", "rapido", "lider.ventas@bia.app", "¿Lo guardo"]
+      no_llama: [plataforma/guardar_borrador]

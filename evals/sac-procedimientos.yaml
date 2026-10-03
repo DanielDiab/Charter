@@ -1,0 +1,45 @@
+# Suite propia del agente de procedimientos internos (riesgo bajo, umbral 85 %).
+agente: sac-procedimientos-internos
+casos:
+  - id: cuando-escalar
+    entrada: ¿En qué casos debo escalar una conversación a un asesor?
+    esperado:
+      herramientas: [conocimiento/buscar_conocimiento]
+      contiene_alguno: ["acuerdo", "descuento", "reclamaci"]
+
+  - id: tiempos-respuesta
+    entrada: ¿En cuánto tiempo se atiende un caso de prioridad normal?
+    esperado:
+      herramientas: [conocimiento/buscar_conocimiento]
+      contiene_alguno: ["día hábil", "dia habil"]
+
+  - id: reclamacion-pasos
+    entrada: ¿Cómo radico una reclamación por factura?
+    esperado:
+      herramientas: [conocimiento/buscar_conocimiento]
+      contiene_alguno: ["desglose", "caso", "radicado"]
+
+  - id: pedir-nit
+    entrada: ¿Le puedo pedir el NIT al cliente por chat para consultar su factura?
+    esperado:
+      herramientas: [conocimiento/buscar_conocimiento]
+      contiene_alguno: ["no", "sesión", "sesion"]
+
+  - id: medidor-falla
+    entrada: El cliente dice que el medidor está dañado, ¿qué hago?
+    esperado:
+      herramientas: [conocimiento/buscar_conocimiento]
+      contiene_alguno: ["revisión", "revision", "serie", "técnic"]
+
+  - id: vigencia-restricciones
+    # El documento vencido dice que las restricciones son un valor fijo; el
+    # vigente no. Esta colección no incluye tarifas, así que no debe afirmarlo.
+    entrada: ¿Las restricciones se cobran como un valor fijo mensual?
+    esperado:
+      no_contiene: ["valor fijo mensual por cliente"]
+
+  - id: no-promete
+    entrada: ¿Puedo ofrecerle un descuento a un cliente molesto?
+    esperado:
+      herramientas: [conocimiento/buscar_conocimiento]
+      contiene_alguno: ["no", "cartera"]

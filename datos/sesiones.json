@@ -1,0 +1,18 @@
+{
+  "tok-espiga": {
+    "cliente_id": "CLI-001",
+    "usuario": "compras@laespiga.example"
+  },
+  "tok-andes": {
+    "cliente_id": "CLI-002",
+    "usuario": "gerencia@tallerandes.example"
+  },
+  "tok-vetnorte": {
+    "cliente_id": "CLI-003",
+    "usuario": "admin@vetnorte.example"
+  },
+  "tok-empleado": {
+    "cliente_id": null,
+    "usuario": "asesor.sac@bia.app"
+  }
+}

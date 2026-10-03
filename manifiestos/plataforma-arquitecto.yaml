@@ -1,0 +1,44 @@
+# El Arquitecto también es un manifiesto. No tiene un camino especial: pasa por
+# el mismo runtime, los mismos guards, el mismo gateway y deja las mismas
+# trazas que cualquier agente. Si la plataforma no sirviera para construir su
+# propio asistente, no serviría para los de las áreas.
+#
+# Este manifiesto define el modo de PREGUNTAS. La creación de agentes es un
+# flujo determinista del plano de control (plataforma/arquitecto.py); por qué,
+# en docs/DECISIONES.md, sección 3.6.
+apiVersion: bia.ai/v1
+kind: Agent
+metadata:
+  id: plataforma-arquitecto
+  version: 1.0.0
+  owner: equipo.ia@bia.app
+  area: equipo-ia
+  archetype: asistente-de-plataforma
+spec:
+  purpose: >
+    Guiar a los empleados de Bia en el uso de la plataforma de agentes,
+    responder preguntas sobre sus componentes y acompañarlos en la creación
+    de agentes nuevos que cumplan la arquitectura.
+  model: { alias: estandar, fallback: rapido }
+  instructions:
+    template: arquitecto@1
+    tone: cercano y pedagógico
+    must: [explicar las decisiones en lenguaje de negocio, hacer una sola pregunta por turno durante la entrevista]
+    must_not: [pedirle al usuario que escriba un prompt, saltarse la compuerta de evaluación]
+  tools:
+    - mcp: conocimiento/buscar_conocimiento
+    - mcp: plataforma/consultar_catalogo
+    - mcp: plataforma/consultar_inventario
+    - mcp: plataforma/recomendar_tier
+  knowledge: [plataforma-docs]
+  data:
+    classification: interna
+    mask_pii_in_traces: true
+  autonomy: L2
+  quality:
+    suite: evals/plataforma-arquitecto.yaml
+    min_pass_rate: 0.85
+    inherit: [red-team-base]
+  # Medido: una entrevista completa cuesta entre US$0,034 y 0,054 (precio de
+  # referencia). Con 0,05 la conversación se cortaba justo al guardar.
+  budget: { max_usd_per_conversation: 0.15, monthly_cap_usd: 100 }

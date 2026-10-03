@@ -1,0 +1,91 @@
+# Catálogo de modelos (inventario de modelos)
+#
+# Lo cura el equipo de IA. Ningún manifiesto nombra un modelo: pide un alias
+# (P3, "los agentes piden capacidades, no modelos") y este archivo lo resuelve.
+# El día que sale un modelo mejor se cambia la línea `modelo:` de un alias, y la
+# plataforma detecta el cambio y manda a re-certificar a todos los agentes que
+# lo usan (ver plataforma/registro.py::verificar_recertificacion). Ningún
+# agente se toca.
+#
+# En el prototipo los tres alias corren local en Ollama, porque el reto pide un
+# LLM local. En producción la propuesta es API cerrada con retención cero
+# (sección 2.8 del documento); el gateway no cambia, solo el `proveedor`.
+#
+# Sobre el precio: local no cuesta por token, pero el presupuesto por
+# conversación es un criterio de la compuerta. Para que ese mecanismo sea
+# demostrable, cada alias lleva un precio de referencia por millón de tokens
+# (el de un modelo comercial de su mismo tamaño). El costo que reporta el
+# prototipo es ese "costo sombra": lo que costaría la misma carga en la nube.
+
+alias:
+  rapido:
+    modelo: qwen2.5:3b
+    proveedor: ollama
+    descripcion: Tareas estrechas y de alto volumen. Clasificar, extraer, resumir, guards.
+    capacidades:            # verificadas por nosotros, no las que anuncia el proveedor
+      herramientas: true
+      json_valido: true
+      contexto_efectivo_tokens: 8192
+      espanol: true
+    retencion: cero         # corre en la máquina: el dato no sale
+    acuerdo_datos: true
+    clasificacion_maxima: confidencial
+    precio_usd_por_millon: { entrada: 0.10, salida: 0.40 }
+    parametros: { temperatura: 0, max_tokens: 400, num_ctx: 8192 }
+
+  estandar:
+    modelo: qwen2.5:7b-instruct
+    proveedor: ollama
+    descripcion: Conversación con herramientas. El tier por defecto.
+    capacidades:
+      herramientas: true
+      json_valido: true
+      contexto_efectivo_tokens: 16384
+      espanol: true
+    retencion: cero
+    acuerdo_datos: true
+    clasificacion_maxima: confidencial
+    precio_usd_por_millon: { entrada: 0.40, salida: 1.60 }
+    parametros: { temperatura: 0, max_tokens: 700, num_ctx: 16384 }
+
+  razonamiento:
+    modelo: qwen3:8b
+    proveedor: ollama
+    descripcion: Planificación y análisis de varios pasos. También juez de la compuerta.
+    capacidades:
+      herramientas: true
+      json_valido: true
+      contexto_efectivo_tokens: 16384
+      espanol: true
+    retencion: cero
+    acuerdo_datos: true
+    clasificacion_maxima: confidencial
+    precio_usd_por_millon: { entrada: 1.00, salida: 4.00 }
+    # reasoning: el razonamiento del modelo va aparte y no se mezcla con la respuesta.
+    parametros: { temperatura: 0, max_tokens: 1500, num_ctx: 16384, reasoning: true }
+
+# Embeddings para la búsqueda híbrida. También pasan por el gateway: así el
+# costo de indexar y consultar conocimiento queda atribuido igual que el resto.
+embeddings:
+  modelo: nomic-embed-text
+  proveedor: ollama
+  precio_usd_por_millon: { entrada: 0.02, salida: 0 }
+
+# ── Cómo se vería en producción (referencia, NO activo en el prototipo) ──
+# La demo corre 100 % local y sin llaves. En Bia, el mismo alias apuntaría a
+# un modelo cerrado por API con retención cero, servido a través de LiteLLM.
+# Ningún manifiesto cambia: solo estas líneas, y el cambio dispara la
+# re-certificación de todos los agentes del alias.
+#
+#  estandar:
+#    modelo: <proveedor>/<modelo-version-fijada>   # nunca "latest"
+#    proveedor: litellm
+#    retencion: cero
+#    acuerdo_datos: true                            # contrato firmado con el proveedor
+#    clasificacion_maxima: confidencial
+#    llave: secreto://gateway/<proveedor>          # la llave vive solo en el gateway
+#    precio_usd_por_millon: { entrada: ..., salida: ... }
+
+# Resultado de evaluar modelos candidatos (figura 10 del documento). Un rechazo
+# también se registra: así nadie vuelve a probar lo mismo sin saberlo.
+candidatos: []

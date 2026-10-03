@@ -1,0 +1,35 @@
+# Colecciones de conocimiento (inventario de orquestación, parte 2)
+#
+# Cada colección tiene dueño: alguien responde por que su contenido esté al
+# día. La vigencia NO vive aquí sino en cada documento (frontmatter), porque
+# dentro de una misma colección conviven versiones de distintas fechas; ver
+# conocimiento/tarifas-metodologia/.
+#
+# `troceo` dice cómo se parte cada tipo de documento (figura 12):
+#   seccion   un fragmento por encabezado "## " (procedimientos, explicaciones)
+#   pregunta  un fragmento por par pregunta/respuesta (FAQ)
+
+colecciones:
+  tarifas-metodologia:
+    dueno: equipo-regulatorio
+    clasificacion: publica
+    troceo: seccion
+    descripcion: Qué significa cada componente del costo unitario. Las CIFRAS no están aquí, están en tarifas/calcular_desglose.
+
+  procedimientos-sac:
+    dueno: lider.sac@bia.app
+    clasificacion: interna
+    troceo: seccion
+    descripcion: Cómo se atiende, escala y documenta un caso en servicio al cliente.
+
+  faq-facturacion:
+    dueno: lider.sac@bia.app
+    clasificacion: publica
+    troceo: pregunta
+    descripcion: Preguntas frecuentes de clientes sobre la factura.
+
+  plataforma-docs:
+    dueno: equipo-ia
+    clasificacion: interna
+    troceo: seccion
+    descripcion: Cómo funciona la plataforma de agentes. Es la fuente del Arquitecto.

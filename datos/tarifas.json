@@ -1,0 +1,42 @@
+{
+  "nota": "Valores ilustrativos para el prototipo. No son tarifas publicadas.",
+  "contribucion_pct": 20,
+  "periodos": {
+    "2026-07": {
+      "componentes_cop_kwh": {
+        "G": 331.4,
+        "T": 54.8,
+        "D": 259.6,
+        "C": 74.9,
+        "P": 44.7,
+        "R": 29.8
+      },
+      "cu_cop_kwh": 795.2,
+      "vigente_desde": "2026-07-01"
+    },
+    "2026-08": {
+      "componentes_cop_kwh": {
+        "G": 344.1,
+        "T": 55.3,
+        "D": 261.2,
+        "C": 75.4,
+        "P": 45.6,
+        "R": 41.3
+      },
+      "cu_cop_kwh": 822.9,
+      "vigente_desde": "2026-08-01"
+    },
+    "2026-09": {
+      "componentes_cop_kwh": {
+        "G": 372.6,
+        "T": 55.9,
+        "D": 262.0,
+        "C": 76.1,
+        "P": 46.8,
+        "R": 58.2
+      },
+      "cu_cop_kwh": 871.6,
+      "vigente_desde": "2026-09-01"
+    }
+  }
+}

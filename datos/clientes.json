@@ -1,0 +1,29 @@
+[
+  {
+    "cliente_id": "CLI-001",
+    "razon_social": "Panadería La Espiga S.A.S.",
+    "nit": "900123456-1",
+    "contacto": "compras@laespiga.example",
+    "telefono": "3001112233",
+    "segmento": "comercial",
+    "medidor": "MI-55021"
+  },
+  {
+    "cliente_id": "CLI-002",
+    "razon_social": "Taller Metalmecánico Andes Ltda.",
+    "nit": "800987654-3",
+    "contacto": "gerencia@tallerandes.example",
+    "telefono": "3104445566",
+    "segmento": "comercial",
+    "medidor": "MI-55340"
+  },
+  {
+    "cliente_id": "CLI-003",
+    "razon_social": "Clínica Veterinaria Norte S.A.S.",
+    "nit": "901555222-7",
+    "contacto": "admin@vetnorte.example",
+    "telefono": "3157778899",
+    "segmento": "comercial",
+    "medidor": "MI-56012"
+  }
+]

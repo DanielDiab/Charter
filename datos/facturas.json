@@ -1,0 +1,107 @@
+{
+  "CLI-001": [
+    {
+      "numero": "FE-001-202607",
+      "periodo": "2026-07",
+      "kwh": 4113,
+      "cu_cop_kwh": 795.2,
+      "valor_energia_cop": 3270657,
+      "contribucion_cop": 654131,
+      "total_cop": 3924788,
+      "fecha_vencimiento": "2026-08-20",
+      "estado": "pagada"
+    },
+    {
+      "numero": "FE-001-202608",
+      "periodo": "2026-08",
+      "kwh": 4082,
+      "cu_cop_kwh": 822.9,
+      "valor_energia_cop": 3359077,
+      "contribucion_cop": 671815,
+      "total_cop": 4030892,
+      "fecha_vencimiento": "2026-09-20",
+      "estado": "pagada"
+    },
+    {
+      "numero": "FE-001-202609",
+      "periodo": "2026-09",
+      "kwh": 5134,
+      "cu_cop_kwh": 871.6,
+      "valor_energia_cop": 4474794,
+      "contribucion_cop": 894958,
+      "total_cop": 5369752,
+      "fecha_vencimiento": "2026-10-20",
+      "estado": "pendiente"
+    }
+  ],
+  "CLI-002": [
+    {
+      "numero": "FE-002-202607",
+      "periodo": "2026-07",
+      "kwh": 9096,
+      "cu_cop_kwh": 795.2,
+      "valor_energia_cop": 7233139,
+      "contribucion_cop": 1446627,
+      "total_cop": 8679766,
+      "fecha_vencimiento": "2026-08-20",
+      "estado": "pagada"
+    },
+    {
+      "numero": "FE-002-202608",
+      "periodo": "2026-08",
+      "kwh": 9147,
+      "cu_cop_kwh": 822.9,
+      "valor_energia_cop": 7527066,
+      "contribucion_cop": 1505413,
+      "total_cop": 9032479,
+      "fecha_vencimiento": "2026-09-20",
+      "estado": "pendiente"
+    },
+    {
+      "numero": "FE-002-202609",
+      "periodo": "2026-09",
+      "kwh": 8676,
+      "cu_cop_kwh": 871.6,
+      "valor_energia_cop": 7562001,
+      "contribucion_cop": 1512400,
+      "total_cop": 9074401,
+      "fecha_vencimiento": "2026-10-20",
+      "estado": "pendiente"
+    }
+  ],
+  "CLI-003": [
+    {
+      "numero": "FE-003-202607",
+      "periodo": "2026-07",
+      "kwh": 2787,
+      "cu_cop_kwh": 795.2,
+      "valor_energia_cop": 2216222,
+      "contribucion_cop": 443244,
+      "total_cop": 2659466,
+      "fecha_vencimiento": "2026-08-20",
+      "estado": "pagada"
+    },
+    {
+      "numero": "FE-003-202608",
+      "periodo": "2026-08",
+      "kwh": 2778,
+      "cu_cop_kwh": 822.9,
+      "valor_energia_cop": 2286016,
+      "contribucion_cop": 457203,
+      "total_cop": 2743219,
+      "fecha_vencimiento": "2026-09-20",
+      "estado": "pagada"
+    },
+    {
+      "numero": "FE-003-202609",
+      "periodo": "2026-09",
+      "kwh": 2703,
+      "cu_cop_kwh": 871.6,
+      "valor_energia_cop": 2355934,
+      "contribucion_cop": 471186,
+      "total_cop": 2827120,
+      "fecha_vencimiento": "2026-10-20",
+      "estado": "pendiente"
+    }
+  ]
+}

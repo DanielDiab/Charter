@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+.pytest_cache/
+.env
+# Estado local: registro, trazas, índice, casos, reportes. Se regenera con `bia iniciar`.
+.estado/
+# Borradores creados con el Arquitecto durante la demo
+manifiestos/borradores/*.yaml
+.DS_Store

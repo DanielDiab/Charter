@@ -1,0 +1,75 @@
+# Catálogo de herramientas (inventario de orquestación, parte 1)
+#
+# Cada sistema de Bia se conecta UNA vez como servidor MCP y queda disponible
+# para todo agente que lo declare en su manifiesto. Lo que no está declarado,
+# el runtime no lo carga: el agente ni siquiera sabe que existe.
+#
+# Campos que deciden el comportamiento del runtime:
+#   tipo                 lectura | determinista | escritura
+#   requiere_confirmacion  la escritura no se ejecuta hasta que el usuario dice
+#                        que sí. Lo impone la plataforma, no el manifiesto: un
+#                        creador no puede publicar una escritura sin confirmar.
+#   clasificacion        el dato más sensible que devuelve. Un agente no puede
+#                        usar una herramienta más sensible que su propia
+#                        clasificación.
+#   inyectados           parámetros que pone el runtime y que el modelo NO ve
+#                        en el esquema. `cliente_id` sale de la sesión (así el
+#                        agente no puede consultar a otra empresa aunque se lo
+#                        pidan), `colecciones` sale del manifiesto (así no
+#                        puede leer conocimiento que no declaró) y el dueño de
+#                        un agente nuevo es quien tiene la sesión abierta.
+
+servidores:
+  facturacion:  { modulo: mcp_servers.facturacion,  dueno: equipo-facturacion,   sistema: Facturación (datos sintéticos) }
+  medicion:     { modulo: mcp_servers.medicion,     dueno: equipo-medicion,      sistema: Medidores inteligentes (datos sintéticos) }
+  tarifas:      { modulo: mcp_servers.tarifas,      dueno: equipo-regulatorio,   sistema: Tablas tarifarias (datos sintéticos) }
+  soporte:      { modulo: mcp_servers.soporte,      dueno: equipo-sac,           sistema: Mesa de casos de soporte }
+  conocimiento: { modulo: mcp_servers.conocimiento, dueno: equipo-ia,            sistema: Búsqueda híbrida sobre colecciones }
+  plataforma:   { modulo: mcp_servers.plataforma,   dueno: equipo-ia,            sistema: Registro y catálogos (lo usa el Arquitecto) }
+
+herramientas:
+  facturacion/consultar_factura:
+    tipo: lectura
+    clasificacion: confidencial
+    inyectados: { cliente_id: sesion.cliente_id }
+    para_que: Factura de un periodo del cliente autenticado (total, vencimiento, estado).
+
+  medicion/consultar_consumo:
+    tipo: lectura
+    clasificacion: confidencial
+    inyectados: { cliente_id: sesion.cliente_id }
+    para_que: Consumo medido por periodo, franjas y cambios detectados en la serie diaria.
+
+  tarifas/calcular_desglose:
+    tipo: determinista
+    clasificacion: confidencial
+    inyectados: { cliente_id: sesion.cliente_id }
+    para_que: Desglose de la factura por componente del costo unitario y escenarios de ahorro. El modelo no hace aritmética.
+
+  soporte/crear_caso:
+    tipo: escritura
+    requiere_confirmacion: true
+    clasificacion: confidencial
+    inyectados: { cliente_id: sesion.cliente_id }
+    para_que: Abre un caso para un asesor humano con un resumen de la conversación.
+
+  conocimiento/buscar_conocimiento:
+    tipo: lectura
+    clasificacion: interna
+    inyectados: { colecciones: manifiesto.knowledge, traza: runtime }
+    para_que: Busca en las colecciones del agente. Filtra por vigencia antes de buscar y devuelve fragmentos con cita.
+
+  plataforma/consultar_catalogo:
+    tipo: lectura
+    clasificacion: interna
+    para_que: Lista alias de modelos, herramientas, colecciones o arquetipos disponibles.
+
+  plataforma/consultar_inventario:
+    tipo: lectura
+    clasificacion: interna
+    para_que: Agentes registrados con su estado, dueño, alias y costo.
+
+  plataforma/recomendar_tier:
+    tipo: determinista
+    clasificacion: interna
+    para_que: Aplica el árbol de decisión de la figura 9 (primero el dato, después la tarea).
