@@ -1,10 +1,25 @@
 # Plataforma de agentes de Bia — prototipo
 
+**macOS / Linux**
+
 1. `python3 -m venv .venv && source .venv/bin/activate && pip install -e .`
 2. `ollama serve` y en otra terminal `ollama pull qwen2.5:7b-instruct qwen2.5:3b qwen3:8b nomic-embed-text`
 3. `bia iniciar` registra los manifiestos e indexa el conocimiento; `bia inventario` muestra los tres inventarios
 4. `bia arquitecto` abre el agente que guía y crea agentes; `bia chat sac-asistente-facturacion --sandbox` prueba el caso aplicado
-5. `bia evaluar <agente>` corre la compuerta, `bia servir` levanta la API compatible con OpenAI y `pytest` corre las 85 pruebas offline
+5. `bia evaluar sac-procedimientos-internos` corre la compuerta (~1 min), `bia servir` levanta la API compatible con OpenAI y `pytest` corre las 85 pruebas offline
+
+**Windows (PowerShell)**
+
+1. `py -m venv .venv; .venv\Scripts\Activate.ps1; $env:PYTHONUTF8 = "1"; pip install -e .`
+2. Instalar Ollama desde ollama.com (queda corriendo en segundo plano) y `ollama pull qwen2.5:7b-instruct qwen2.5:3b qwen3:8b nomic-embed-text`
+3. `bia iniciar` registra los manifiestos e indexa el conocimiento; `bia inventario` muestra los tres inventarios
+4. `bia arquitecto` abre el agente que guía y crea agentes; `bia chat sac-asistente-facturacion --sandbox` prueba el caso aplicado
+5. `bia evaluar sac-procedimientos-internos` corre la compuerta (~1 min), `bia servir` levanta la API compatible con OpenAI y `pytest` corre las 85 pruebas offline
+
+> En Windows, si PowerShell no deja activar el entorno, corre antes
+> `Set-ExecutionPolicy -Scope Process RemoteSigned`. Se recomienda Windows
+> Terminal, que muestra bien las tablas y los símbolos del CLI. Requiere Python
+> 3.11 o superior; el prototipo se probó con Python 3.14 en macOS.
 
 Todo corre en local con Ollama, sin llaves de API.
 

@@ -156,7 +156,7 @@ def main() -> None:
         ("tarifas.json", tarifas),
         ("sesiones.json", sesiones),
     ]:
-        (DATOS / nombre).write_text(json.dumps(contenido, ensure_ascii=False, indent=2) + "\n")
+        (DATOS / nombre).write_text(json.dumps(contenido, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"Datos sintéticos escritos en {DATOS}")
 
 

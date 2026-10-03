@@ -35,7 +35,7 @@ def crear_caso(
 ) -> dict:
     """Abre un caso para que un asesor humano lo atienda."""
     ruta = _archivo()
-    casos = json.loads(ruta.read_text()) if ruta.exists() else []
+    casos = json.loads(ruta.read_text(encoding="utf-8")) if ruta.exists() else []
     caso = {
         "caso_id": f"CASO-{len(casos) + 1001}",
         "cliente_id": cliente_id,
@@ -46,7 +46,7 @@ def crear_caso(
         "creado": time.strftime("%Y-%m-%d %H:%M"),
     }
     casos.append(caso)
-    ruta.write_text(json.dumps(casos, ensure_ascii=False, indent=2))
+    ruta.write_text(json.dumps(casos, ensure_ascii=False, indent=2), encoding="utf-8")
     return {
         # Medido en la compuerta: sin esta frase, el modelo a veces confirmaba
         # el caso sin darle el número al usuario.

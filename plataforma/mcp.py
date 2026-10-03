@@ -55,7 +55,7 @@ class Conexiones:
         )
         # El stderr de los servidores va a un archivo: en la terminal solo debe
         # verse la conversación.
-        log = self._pila.enter_context(open(config().estado_dir / "mcp.log", "a"))
+        log = self._pila.enter_context(open(config().estado_dir / "mcp.log", "a", encoding="utf-8"))
         leer, escribir = await self._pila.enter_async_context(stdio_client(parametros, errlog=log))
         sesion = await self._pila.enter_async_context(ClientSession(leer, escribir))
         await sesion.initialize()

@@ -7,10 +7,10 @@ agregar un frontend que mantener. Los comandos siguen el camino pavimentado:
     bia iniciar                       registra los manifiestos e indexa el conocimiento
     bia inventario                    los tres inventarios
     bia arquitecto                    el agente que guía la creación de agentes
-    bia chat <id> --sandbox           probar un borrador
-    bia evaluar <id>                  la compuerta
-    bia aprobar <id> --rol --quien    aprobaciones según el riesgo
-    bia publicar <id>                 solo si pasó todo lo anterior
+    bia chat sac-asistente-facturacion --sandbox     probar un borrador
+    bia evaluar sac-asistente-facturacion            la compuerta
+    bia aprobar sac-asistente-facturacion --rol dueno --quien lider.sac@bia.app
+    bia publicar sac-asistente-facturacion           solo si pasó todo lo anterior
     bia servir                        la API compatible con OpenAI
     bia costos | trazas | metricas    observabilidad
 """
@@ -164,8 +164,14 @@ def evaluar(id_agente, version, juez, casos):
     lineas += [f"[yellow]⚠ {a}[/]" for a in rep.get("advertencias", [])]
     consola.print(Panel("\n".join(lineas), title=rep["resumen"], border_style=color))
     if rep["aprobado"]:
-        consola.print(f"Aprobaciones necesarias (riesgo {rep['riesgo']}): {', '.join(registro.APROBACIONES[rep['riesgo']])}. "
-                      f"Usa `bia aprobar {id_agente} --rol <rol> --quien <correo>`.")
+        # Comandos listos para copiar: con marcadores como <rol>, la shell los
+        # interpreta como redirecciones y el comando falla.
+        dueno = registro.obtener(id_agente, rep["version"])[0].metadata.owner
+        quien = {"dueno": dueno, "equipo-ia": "equipo.ia@bia.app", "cumplimiento": "cumplimiento@bia.app"}
+        consola.print(f"Aprobaciones necesarias (riesgo {rep['riesgo']}). Para registrarlas y publicar:")
+        for rol in registro.APROBACIONES[rep["riesgo"]]:
+            consola.print(f"  bia aprobar {id_agente} --rol {rol} --quien {quien[rol]}", highlight=False)
+        consola.print(f"  bia publicar {id_agente}", highlight=False)
 
 
 @cli.command()
@@ -284,7 +290,7 @@ def _conversar(id_agente: str, sesion: dict, entorno: str, version: str | None, 
 @click.option("--version")
 def chat(id_agente, cliente, sandbox, version):
     """Conversa con un agente. Sin --sandbox, solo agentes publicados."""
-    sesiones = json.loads((DATOS / "sesiones.json").read_text())
+    sesiones = json.loads((DATOS / "sesiones.json").read_text(encoding="utf-8"))
     sesion = next((s for s in sesiones.values() if s["cliente_id"] == cliente), {"cliente_id": cliente})
     try:
         _conversar(id_agente, sesion, "sandbox" if sandbox else "produccion", version)

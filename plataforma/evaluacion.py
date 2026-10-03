@@ -219,7 +219,7 @@ async def evaluar(agente: Agente, *, usar_juez: bool = False, solo: list[str] | 
 
     carpeta = config().estado_dir / "reportes"
     carpeta.mkdir(exist_ok=True)
-    (carpeta / f"{m.id}-{m.version}.json").write_text(json.dumps(reporte, ensure_ascii=False, indent=2))
+    (carpeta / f"{m.id}-{m.version}.json").write_text(json.dumps(reporte, ensure_ascii=False, indent=2), encoding="utf-8")
     if not solo:
         registro.guardar_reporte(m.id, m.version, reporte)
     return reporte

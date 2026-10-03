@@ -156,7 +156,7 @@ def proponer_manifiesto(id: str, area: str, owner: str, arquetipo: str, proposit
     errores = [e for e in validar(m) if "suite de evaluación" not in e]
     errores += [f"La herramienta '{r}' no existe en el catálogo." for r in desconocidas]
 
-    (_propuestas_dir() / f"{id}.json").write_text(json.dumps({"manifiesto": m.a_yaml(), "suite": None}, ensure_ascii=False))
+    (_propuestas_dir() / f"{id}.json").write_text(json.dumps({"manifiesto": m.a_yaml(), "suite": None}, ensure_ascii=False), encoding="utf-8")
     return {
         "id": id,
         "riesgo": nivel_riesgo,
@@ -174,7 +174,7 @@ def generar_casos_prueba(id: str, preguntas: list[str], respuestas_buenas: list[
     ruta = _propuestas_dir() / f"{id}.json"
     if not ruta.exists():
         return {"error": f"No hay propuesta para '{id}'."}
-    propuesta = json.loads(ruta.read_text())
+    propuesta = json.loads(ruta.read_text(encoding="utf-8"))
     m = desde_texto(propuesta["manifiesto"])
     sesion = {"cliente_id": cliente_de_prueba} if m.spec.data.subject_from else {}
 
@@ -196,7 +196,7 @@ def generar_casos_prueba(id: str, preguntas: list[str], respuestas_buenas: list[
 
     suite = {"agente": id, "casos": casos}
     propuesta["suite"] = yaml.safe_dump(suite, sort_keys=False, allow_unicode=True)
-    ruta.write_text(json.dumps(propuesta, ensure_ascii=False))
+    ruta.write_text(json.dumps(propuesta, ensure_ascii=False), encoding="utf-8")
     return {
         "id": id,
         "casos_del_creador": len(preguntas),
@@ -210,7 +210,7 @@ def guardar_borrador(id: str) -> dict:
     ruta = _propuestas_dir() / f"{id}.json"
     if not ruta.exists():
         return {"error": f"No hay propuesta para '{id}'."}
-    propuesta = json.loads(ruta.read_text())
+    propuesta = json.loads(ruta.read_text(encoding="utf-8"))
     if not propuesta["suite"]:
         return {"error": "Falta la suite de pruebas de la propuesta."}
     (EVALS / f"{id}.yaml").write_text(propuesta["suite"], encoding="utf-8")

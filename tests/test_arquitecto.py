@@ -57,7 +57,7 @@ async def test_entrevista_completa_crea_un_borrador_valido(guion):
     assert info["estado"] == "borrador"
     assert m.metadata.owner == "lider.ventas@bia.app"          # de la sesión, no del modelo
     assert m.spec.model.alias == "rapido"
-    suite = yaml.safe_load((EVALS / "ventas-resumen-de-llamadas.yaml").read_text())
+    suite = yaml.safe_load((EVALS / "ventas-resumen-de-llamadas.yaml").read_text(encoding="utf-8"))
     entradas = [c["entrada"] for c in suite["casos"]]
     assert not any("María" in e for e in entradas)               # el ejemplo inventado no llegó a la suite
     (MANIFIESTOS / "borradores" / "ventas-resumen-de-llamadas.yaml").unlink()

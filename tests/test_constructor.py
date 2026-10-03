@@ -35,7 +35,7 @@ def test_de_la_entrevista_al_borrador_registrado():
     g = constructor.guardar_borrador(m.id)
     assert g["estado"] == "borrador"
     assert registro.obtener(m.id)[1]["estado"] == "borrador"
-    suite = yaml.safe_load((MANIFIESTOS.parent / g["suite"]).read_text())
+    suite = yaml.safe_load((MANIFIESTOS.parent / g["suite"]).read_text(encoding="utf-8"))
     assert suite["casos"][0]["sesion"] == {"cliente_id": "CLI-001"}
     (MANIFIESTOS.parent / g["manifiesto"]).unlink()
     (MANIFIESTOS.parent / g["suite"]).unlink()

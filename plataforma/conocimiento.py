@@ -125,7 +125,7 @@ async def ingestar(gateway=None) -> dict:
                 f.pop("vector", None)
             print(f"[conocimiento] sin embeddings ({exc}); la búsqueda usará solo BM25")
 
-    (config().estado_dir / "indice.json").write_text(json.dumps(fragmentos, ensure_ascii=False))
+    (config().estado_dir / "indice.json").write_text(json.dumps(fragmentos, ensure_ascii=False), encoding="utf-8")
     resumen = Counter(f["coleccion"] for f in fragmentos)
     return {"fragmentos": len(fragmentos), "por_coleccion": dict(resumen), "embeddings": embeddings_ok}
 

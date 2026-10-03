@@ -17,7 +17,7 @@ def test_riesgo_lo_calcula_la_plataforma():
 
 
 def _facturacion(**cambios) -> str:
-    texto = (MANIFIESTOS / "sac-asistente-facturacion.yaml").read_text()
+    texto = (MANIFIESTOS / "sac-asistente-facturacion.yaml").read_text(encoding="utf-8")
     for viejo, nuevo in cambios.items():
         assert viejo in texto
         texto = texto.replace(viejo, nuevo)

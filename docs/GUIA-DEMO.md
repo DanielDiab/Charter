@@ -13,11 +13,27 @@ ollama pull qwen2.5:7b-instruct qwen2.5:3b qwen3:8b nomic-embed-text
 pytest                                         # 85 pruebas offline, ~15 s, no necesitan Ollama
 ```
 
+En Windows (PowerShell) la preparación cambia así; el resto de los comandos
+`bia` de esta guía son iguales:
+
+```powershell
+py -m venv .venv; .venv\Scripts\Activate.ps1; $env:PYTHONUTF8 = "1"; pip install -e .
+# Ollama para Windows ya corre en segundo plano: no hace falta `ollama serve`
+ollama pull qwen2.5:7b-instruct qwen2.5:3b qwen3:8b nomic-embed-text
+pytest
+```
+
 Para empezar de cero en cualquier momento (borra el registro, las trazas y
 el agente creado en el paso 5):
 
 ```bash
 rm -rf .estado && find manifiestos/borradores evals -maxdepth 1 -name 'ventas-*.yaml' -delete
+```
+
+En Windows (PowerShell):
+
+```powershell
+Remove-Item -Recurse -Force .estado -ErrorAction SilentlyContinue; Get-ChildItem manifiestos\borradores, evals -Filter 'ventas-*.yaml' | Remove-Item
 ```
 
 ## 1. Visibilidad: la fase 0 del documento
@@ -34,7 +50,8 @@ cuestan. En las colecciones aparecen **2 fragmentos vencidos**: es la versión
 anterior de un documento de tarifas, que el filtro de vigencia saca antes de
 buscar.
 
-> Conviene una terminal ancha (`COLUMNS=160`): las tablas son grandes.
+> Conviene una terminal ancha: las tablas son grandes. En macOS/Linux se puede
+> forzar con `COLUMNS=160 bia inventario`; en Windows basta con maximizar la ventana.
 
 ## 2. La compuerta: nada se publica sin pasar
 
@@ -134,6 +151,10 @@ bia evaluar ventas-resumen-de-llamadas     # pasa, con la advertencia de que su 
 ```
 
 ## 6. La API: los canales se conectan como a cualquier modelo
+
+En Windows, usa `curl.exe` en lugar de `curl` (en PowerShell, `curl` es otro
+comando) y escapa las comillas del JSON, o prueba desde `http://localhost:8000/docs`,
+la documentación interactiva que genera FastAPI.
 
 ```bash
 bia servir                                  # en otra terminal
