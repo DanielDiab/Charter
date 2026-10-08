@@ -115,7 +115,7 @@ charter costos              # costo por agente, área y entorno
 charter metricas sac-asistente-facturacion
 ```
 
-## 5. El PLUS: el Arquitecto
+## 5. El Arquitecto: crear agentes sin escribir prompts
 
 ```bash
 charter arquitecto

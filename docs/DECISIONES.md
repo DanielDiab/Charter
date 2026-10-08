@@ -102,7 +102,7 @@ los casos que no pasan, con la respuesta y las herramientas que llamó.
 > Evalúa la misma versión del agente con el alias rapido y con estandar y
 compárame suite propia, seguridad, costo y latencia.
 
-**Para validar el PLUS de punta a punta:**
+**Para validar el Arquitecto de punta a punta:**
 
 > Simula una entrevista completa con el Arquitecto como lo haría alguien de ventas que no sabe escribir prompts, y verifica que el borrador quede
 registrado, con su dueño y su suite.

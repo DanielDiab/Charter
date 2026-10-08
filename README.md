@@ -19,43 +19,39 @@ Everything runs locally on Ollama (Qwen 2.5 3B/7B, Qwen3 8B, `nomic-embed-text`)
 
 ## Architecture
 
+**Define and certify.** An agent exists only as a manifest in the registry, and only the gate plus approvals move it to published.
+
 ```mermaid
-flowchart TB
-    subgraph define["Define and certify"]
-        M["Manifest YAML<br/>purpose · must / must_not · tools<br/>knowledge · model alias · budget · suite"]
-        CAT[("Catalogs<br/>models · tools · collections<br/>archetypes · templates · policies")]
-        REG[("Registry<br/>draft → evaluation → published<br/>→ suspended / deprecated")]
-        GATE{{"Eval gate<br/>own suite ≥ risk threshold<br/>security suites at 100 %<br/>cost and latency vs budget"}}
-        APP["Approvals<br/>depend on risk"]
-        M -->|validated against| CAT
-        M --> REG
-        REG --> GATE
-        GATE -->|pass| APP
-        APP -->|publish| REG
-        GATE -->|fail| REG
-        CAT -.->|"dependency changed:<br/>re-certify"| REG
-    end
+flowchart LR
+    M["Manifest YAML<br/>purpose · must / must_not<br/>tools · knowledge<br/>model alias · budget · suite"]
+    CAT[("Catalogs<br/>models · tools · collections<br/>archetypes · templates · policies")]
+    REG[("Registry<br/>draft → evaluation → published<br/>→ suspended / deprecated")]
+    GATE{{"Eval gate<br/>own suite ≥ risk threshold<br/>security suites at 100 %<br/>cost and latency vs budget"}}
+    APP["Approvals<br/>depend on risk"]
+    PUB(["Published:<br/>served by the API"])
+    M -->|validated against| CAT
+    M -->|register| REG
+    REG --> GATE
+    GATE -->|fail| REG
+    GATE -->|pass| APP --> PUB
+    CAT -.->|"dependency changed:<br/>back to evaluation"| REG
+```
 
-    subgraph serve["Serve"]
-        CLIENT["OpenAI-compatible API · CLI"]
-        subgraph RT["LangGraph runtime (one graph for all agents)"]
-            GIN["Input guard"] --> RET["Retrieval<br/>validity filter · BM25 + vectors · RRF"]
-            RET --> AG["Agent step"]
-            AG <--> TOOLS["Tool calls<br/>writes held for confirmation"]
-            AG --> GOUT["Output guard<br/>figures · PII · promises"]
-        end
-        GW["Gateway<br/>alias → model · budget · fallback · cost"]
-        LLM["Ollama"]
-        MCP["6 MCP servers<br/>billing · metering · tariffs<br/>support · knowledge · platform"]
-        TR[("Traces<br/>spans, PII masked")]
-        CLIENT --> GIN
-        AG --> GW --> LLM
-        TOOLS --> MCP
-        RT --> TR
-    end
+**Serve.** Published agents run through one shared runtime. The eval gate runs its suites through this same runtime, guards and gateway, so what gets certified is what gets served.
 
-    REG -->|only published agents are served| CLIENT
-    GATE -.->|runs suites through| RT
+```mermaid
+flowchart LR
+    CLIENT["OpenAI-compatible API<br/>or CLI"]
+    subgraph RT["LangGraph runtime: one graph for all agents"]
+        GIN["Input guard<br/>injection · other customer · scope"] --> RET["Retrieval<br/>(document archetypes)<br/>validity filter · BM25 + vectors · RRF"]
+        RET --> AG["Agent step"]
+        AG <--> TOOLS["Tool calls<br/>writes held for confirmation"]
+        AG --> GOUT["Output guard<br/>figures · PII · promises"]
+    end
+    CLIENT --> GIN
+    TOOLS --> MCP["6 MCP servers<br/>billing · metering · tariffs<br/>support · knowledge · platform"]
+    AG --> GW["Gateway<br/>alias → model · budget<br/>fallback · cost"] --> LLM["Ollama"]
+    RT -.-> TR[("Traces<br/>spans, PII masked")]
 ```
 
 ## Design decisions
