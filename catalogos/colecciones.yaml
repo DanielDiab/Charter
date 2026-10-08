@@ -17,13 +17,13 @@ colecciones:
     descripcion: Qué significa cada componente del costo unitario. Las CIFRAS no están aquí, están en tarifas/calcular_desglose.
 
   procedimientos-sac:
-    dueno: lider.sac@bia.app
+    dueno: lider.sac@energia.example
     clasificacion: interna
     troceo: seccion
     descripcion: Cómo se atiende, escala y documenta un caso en servicio al cliente.
 
   faq-facturacion:
-    dueno: lider.sac@bia.app
+    dueno: lider.sac@energia.example
     clasificacion: publica
     troceo: pregunta
     descripcion: Preguntas frecuentes de clientes sobre la factura.

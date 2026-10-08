@@ -1,0 +1,17 @@
+\begin{tikzpicture}[x=1cm,y=1cm, est/.style={base, rounded corners=8pt, minimum width=2.3cm, minimum height=0.85cm, font=\sffamily\scriptsize}]
+\node[est, fill=neutbg, draw=neutbd] (bor) at (0,0) {\textbf{Borrador}\\constructor, sandbox};
+\node[est, fill=ctrlbg, draw=ctrlbd] (stg) at (4.0,0) {\textbf{Evaluación}\\suites y revisión};
+\node[est, fill=execbg, draw=execbd] (pub) at (8.0,0) {\textbf{Publicado}\\en el registro y la API};
+\node[est, fill=riskbg, draw=riskbd] (sus) at (8.0,-2.3) {\textbf{Suspendido}\\por incidente};
+\node[est, fill=obsbg, draw=obsbd] (dep) at (12.0,0) {\textbf{Deprecado}\\sin tráfico nuevo};
+\node[est, fill=neutbg, draw=neutbd] (ret) at (15.3,0) {\textbf{Retirado}\\traza conservada};
+\draw[flecha] (bor) -- node[etq, above]{enviar} (stg);
+\draw[flecha] (stg) -- node[etq, above, yshift=2pt]{pasa la\\compuerta} (pub);
+\draw[flecha] (stg.south) to[bend left=28] node[etq, below]{falla: vuelve con el reporte} (bor.south);
+\draw[flecha] (pub) -- node[etq, above, yshift=2pt]{reemplazo o\\caducidad} (dep);
+\draw[flecha] (dep) -- (ret);
+\draw[flecha, draw=obsbd] (pub.north) to[bend right=35] node[etq, above, text=obsbd]{re-certificación: cambia alias, herramienta o colección} (stg.north);
+\draw[flecha, draw=obsbd] ($(pub.south)+(-0.3,0)$) -- node[etq, left, text=obsbd]{alerta} ($(sus.north)+(-0.3,0)$);
+\draw[flecha] ($(sus.north)+(0.3,0)$) -- node[etq, right]{corregido} ($(pub.south)+(0.3,0)$);
+\draw[flecha, draw=obsbd] (sus.east) -| node[etq, below, pos=0.3, text=obsbd]{no se corrige} (dep.south);
+\end{tikzpicture}

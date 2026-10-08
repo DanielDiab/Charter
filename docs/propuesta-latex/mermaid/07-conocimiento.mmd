@@ -1,0 +1,10 @@
+flowchart LR
+  Q[Conocimiento] --> D1{¿De un cliente o en vivo?}
+  D1 -- sí --> H1[Herramienta]
+  D1 -- no --> D2{¿Es un cálculo?}
+  D2 -- sí --> H2[Herramienta determinista]
+  D2 -- no --> D3{¿Regla que siempre aplica?}
+  D3 -- sí --> H3[Política o guard]
+  D3 -- no --> D4{¿Pequeño y estable?}
+  D4 -- sí --> H4[En las instrucciones]
+  D4 -- no --> RAG[RAG]

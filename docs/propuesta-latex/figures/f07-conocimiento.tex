@@ -1,0 +1,15 @@
+\begin{tikzpicture}[x=1cm,y=1cm, dd/.style={dec, font=\sffamily\tiny, inner sep=0pt, minimum width=2.75cm, minimum height=1.35cm}]
+\node[neut] (q) at (-0.6,0) {Conocimiento\\que el agente\\necesita};
+\node[dd] (d1) at (2.35,0) {¿Es de un cliente\\o cambia en vivo?};
+\node[dd] (d2) at (5.55,0) {¿Es un cálculo?};
+\node[dd] (d3) at (8.75,0) {¿Es una regla\\que siempre aplica?};
+\node[dd] (d4) at (11.95,0) {¿Es pequeño\\y estable?};
+\node[exec, text width=1.9cm, minimum height=1.0cm] (rag) at (15.1,0) {\textbf{RAG}\\extenso, cambia, hay que citar};
+\draw[flecha] (q) -- (d1);
+\foreach \a/\b in {d1/d2,d2/d3,d3/d4,d4/rag}{\draw[flecha] (\a) -- node[etq, above]{no} (\b);}
+\node[dat, text width=2.5cm] (o1) at (2.35,-2.1) {\textbf{Herramienta}\\consulta al sistema fuente (factura, consumo)};
+\node[dat, text width=2.5cm] (o2) at (5.55,-2.1) {\textbf{Herramienta determinista}\\el modelo no hace aritmética};
+\node[risk, text width=2.5cm] (o3) at (8.75,-2.1) {\textbf{Política o guard}\\no se ``recupera'', se impone};
+\node[ctrl, text width=2.5cm] (o4) at (11.95,-2.1) {\textbf{En las instrucciones}\\pocas FAQ, tono, glosario};
+\foreach \d/\o in {d1/o1,d2/o2,d3/o3,d4/o4}{\draw[flecha] (\d) -- node[etq, right]{sí} (\o);}
+\end{tikzpicture}

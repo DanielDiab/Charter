@@ -1,0 +1,47 @@
+\section{Hoja de ruta}
+\label{sec:fases}
+\begin{respuesta}
+Empezaría por la visibilidad: en dos semanas, un gateway frente a los agentes existentes responde
+cuántos hay, con qué modelo, qué datos y cuánto cuestan. Luego el núcleo con un agente real
+(facturación). El autoservicio llega cuando la compuerta existe. Multiagente, enrutamiento
+dinámico y fine-tuning, solo con señal. La regla: \emph{nunca abrir una puerta antes de tener
+el control que la vigila}.
+\end{respuesta}
+
+\begin{figure}[!htbp]
+  \centering
+  \input{figures/f15-gantt}
+  \caption{Cronograma grueso en semanas. Los rombos son los hitos que cambian lo que la
+  organización puede hacer.}
+  \label{fig:gantt}
+\end{figure}
+
+\begin{table}[!htbp]
+\centering\small
+\caption{Fases: qué entra, qué se adopta y el riesgo que más preocupa.}
+\label{tab:fases}
+\renewcommand{\arraystretch}{1.12}
+\begin{tabularx}{\textwidth}{@{}L{2.4cm}YL{2.6cm}L{3.8cm}@{}}
+\toprule
+\textbf{Fase} & \textbf{Qué entra} & \textbf{Se adopta} & \textbf{Riesgo y mitigación}\\
+\midrule
+0 · Visibilidad\newline sem.\ 1--2 & Inventario de agentes actuales; gateway con llaves centralizadas; costo por área & LiteLLM, Langfuse & Resistencia de áreas: solo cambian URL y llave\\
+1 · Núcleo\newline sem.\ 3--8 & Manifiesto, registro, runtime con guards, MCP de facturación y medición, compuerta v1, migrar facturación & LangGraph, pgvector & Sobrediseñar: se diseña contra un agente real\\
+2 · Autoservicio\newline sem.\ 9--16 & Constructor y Arquitecto, ingesta con vigencia, evaluación en línea, caducidad & SSO existente & Agentes mediocres: compuerta, dueño y caducidad\\
+3 · Escala\newline sem.\ 17--26 & Cobranzas L4, enrutamiento por costo, cobro por área, fine-tuning si hay señal & --- & Complejidad multiagente: traspasos tipados\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\decision{Construir solo lo específico del negocio; adoptar el resto.}
+{Se construyen manifiesto, registro, constructor, compuerta y conectores MCP: es el
+conocimiento que ningún proveedor tiene. Se adoptan gateway, runtime, vectores,
+observabilidad y SSO.}
+{Comprar una plataforma de agentes completa: más rápida en la fase 2, pero ata modelos y deja
+los inventarios fuera de la empresa.}
+
+\textbf{El riesgo que más me preocupa} es de confianza: que un agente exponga datos de un cliente
+a otro o ejecute una acción no autorizada. Por eso sus tres defensas (sujeto desde la sesión,
+escritura con confirmación, guard de salida por bloques) están en la fase 1, antes del primer
+agente publicado. Es coherente con el NIST AI RMF \citep{nist2023rmf}, la ISO/IEC 42001
+\citep{iso42001} y el eje de mitigación de riesgos del CONPES 4144 \citep{conpes4144}.

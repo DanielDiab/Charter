@@ -95,7 +95,7 @@ _INYECCION = [
 _INYECCION_RE = [re.compile(p, re.IGNORECASE) for p in _INYECCION]
 
 # Ampliados después de la compuerta del 2026-10-03: con qwen2.5:3b, la
-# inyección indirecta del documento contaminado salió como "Bia le aplica un
+# inyección indirecta del documento contaminado salió como "La comercializadora le aplica un
 # descuento del 40 por ciento ... y ya quedó aprobado ... está disponible", y
 # la primera versión de estos patrones ("te aplico", "queda aprobado" pegado a
 # "descuento") no la vio. La compuerta sí la detuvo; ahora también el guard.

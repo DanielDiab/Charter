@@ -1,0 +1,37 @@
+\begin{tikzpicture}[x=1cm,y=1cm, svc/.style={exec, text width=2.2cm, minimum height=1.0cm}, st/.style={dat, minimum height=1.0cm, rounded corners=1pt}]
+% fila principal
+\node[svc] (ui)  at (0,2.6)   {\textbf{Consola y constructor}\\web};
+\node[svc] (api) at (3.0,2.6) {\textbf{API de agentes}\\FastAPI, réplicas};
+\node[exec, text width=2.5cm, minimum height=1.0cm] (rt) at (6.15,2.6) {\textbf{Runtime}\\LangGraph, workers};
+\node[svc] (gw)  at (9.3,2.6) {\textbf{Gateway}\\LiteLLM};
+% arriba
+\node[dat, text width=2.2cm, minimum height=0.85cm] (sec) at (9.3,4.25) {\textbf{Secretos}\\llaves solo del gateway};
+% segunda fila
+\node[svc] (ing) at (0,0.9)   {\textbf{Ingesta}\\conversión, troceo};
+\node[svc] (ev)  at (3.0,0.9) {\textbf{Evaluación}\\jobs programados};
+\node[exec, text width=2.25cm, minimum height=1.0cm] (mcp) at (6.5,0.9) {\textbf{Servidores MCP}\\uno por sistema};
+\node[st, text width=2.2cm] (lf) at (9.3,0.9) {\textbf{Langfuse}\\trazas y costos};
+% datos
+\node[st, text width=3.0cm] (pg) at (1.5,-0.85) {\textbf{PostgreSQL}\\registro, pgvector, estado};
+\begin{scope}[on background layer]
+\node[grupo, draw=execbd, fill=execbg!25, fit=(ui)(gw)(sec)(pg)(lf)(mcp), inner sep=9pt] (V) {};
+\end{scope}
+\node[titulo, text=execbd, anchor=south west] at (V.north west) {NUBE DE LA EMPRESA · red privada};
+% externos
+\node[dat, text width=2.3cm, minimum height=1.0cm] (prov) at (13.3,2.6) {\textbf{Proveedores LLM}\\retención cero};
+\node[dat, text width=2.3cm, minimum height=1.0cm] (sis) at (13.3,-0.85) {\textbf{Sistemas de negocio}\\facturación, medición, CRM};
+\node[neut, text width=2.3cm, minimum height=0.85cm] (sso) at (13.3,4.25) {\textbf{SSO}\\identidad};
+% flujo principal
+\draw[flecha] (ui) -- (api); \draw[flecha] (api) -- (rt); \draw[flecha] (rt) -- (gw);
+\draw[flecha, line width=1.1pt, draw=docacento] (gw) -- node[etq, above, text=docacento]{única salida} (prov);
+\draw[flecha] (sec) -- (gw);
+\draw[flecha] (ev) -- (api);
+\draw[flecha] ($(rt.south)+(0.3,0)$) -- (mcp.north -| {$(rt.south)+(0.3,0)$});
+\draw[flecha, draw=obsbd] (gw) -- node[etq, right, text=obsbd]{trazas} (lf);
+% datos
+\draw[flechad] (ing.south -| {$(pg.north west)+(0.35,0)$}) -- ($(pg.north west)+(0.35,0)$);
+\draw[flechad] ($(rt.south west)+(0.12,0)$) |- node[etq, pos=0.75, below]{estado} (pg.east);
+% externos
+\draw[flecha] (mcp.south) |- (sis.west);
+\draw[flecha] (sso.north) -- ++(0,0.8) -| node[etq, pos=0.25, above]{identidad} (api.north);
+\end{tikzpicture}

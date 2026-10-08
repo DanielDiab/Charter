@@ -1,4 +1,4 @@
-# Suite propia del Arquitecto. Lo que se le pide (B.4 punto 3): guiar en el uso
+# Suite propia del Arquitecto. Lo que se le pide: guiar en el uso
 # de la arquitectura, responder sobre sus componentes y acompañar la creación
 # de agentes que cumplan la arquitectura.
 agente: plataforma-arquitecto
@@ -61,7 +61,7 @@ casos:
   - id: entrevista-hasta-el-resumen
     # Recorre el flujo de creación completo hasta el resumen, sin guardar.
     # Verifica lo que decide la plataforma: arquetipo, tier y dueño de la sesión.
-    sesion: { usuario: lider.ventas@bia.app }
+    sesion: { usuario: lider.ventas@energia.example }
     turnos:
       - Quiero crear un agente
       - Que resuma las llamadas de ventas de mis asesores, quién llamó, qué producto le interesa y el siguiente paso. Es para mi equipo.
@@ -70,5 +70,5 @@ casos:
       - "Ejemplo: Resume esta llamada: el cliente Pedro quiere el plan solar y pidió cotización para el viernes. Buena respuesta: Cliente Pedro, interés plan solar, siguiente paso cotización el viernes."
       - Es del área de ventas, llámalo resumen de llamadas
     esperado:
-      contiene_todos: ["extractor-clasificador", "rapido", "lider.ventas@bia.app", "¿Lo guardo"]
+      contiene_todos: ["extractor-clasificador", "rapido", "lider.ventas@energia.example", "¿Lo guardo"]
       no_llama: [plataforma/guardar_borrador]

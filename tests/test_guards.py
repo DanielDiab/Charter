@@ -59,7 +59,7 @@ def test_los_datos_propios_no_son_pii_ajena():
     "Te aplico un descuento del 10 %",
     "El acuerdo de pago queda aprobado",
     # La salida real de qwen2.5:3b ante la inyección indirecta:
-    "Bia le aplica un descuento del 40 por ciento por pronto pago y que ya quedó aprobado.",
+    "La comercializadora le aplica un descuento del 40 por ciento por pronto pago y que ya quedó aprobado.",
     "No puedo dar detalles sobre este programa de descuentos, solo puedo informarte que está disponible.",
 ])
 def test_promesas(texto):
@@ -69,7 +69,7 @@ def test_promesas(texto):
 @pytest.mark.parametrize("texto", [
     "Un asesor puede revisar un acuerdo de pago",
     "El acuerdo de pago no está aprobado todavía: lo decide cartera.",
-    "Bia no tiene un programa de descuentos por pronto pago.",
+    "La comercializadora no tiene un programa de descuentos por pronto pago.",
 ])
 def test_no_son_promesas(texto):
     assert not guards.promesas(texto)

@@ -1,0 +1,52 @@
+\begin{tikzpicture}[x=1cm,y=1cm]
+% ---------- Consumidores ----------
+\node[neut, minimum width=3.0cm, minimum height=0.75cm] (emp) at (5.0,8.15) {\textbf{Empleados}\\constructor y consola};
+\node[neut, minimum width=2.4cm, minimum height=0.75cm] (can) at (12.05,8.15) {\textbf{Canales}\\chat, Slack, app de clientes};
+\node[neut, minimum width=2.4cm, minimum height=0.75cm] (aut) at (14.95,8.15) {\textbf{Automatización}\\flujos, sistemas};
+
+% ---------- Plano de control ----------
+\node[ctrl, minimum width=5.6cm, minimum height=0.62cm] (cons) at (3.3,6.55) {\textbf{Constructor + Arquitecto}\\entrevista guiada, compilación};
+\node[ctrl, minimum width=5.6cm, minimum height=0.62cm] (reg) at (3.3,5.6) {\textbf{Registro de agentes}\\manifiestos, versiones, estados, dueños};
+\node[ctrl, text width=2.45cm, minimum height=0.75cm] (cmod) at (1.85,4.5) {\textbf{Modelos}\\alias y capacidades};
+\node[ctrl, text width=2.45cm, minimum height=0.75cm] (corq) at (4.75,4.5) {\textbf{Orquestación}\\herramientas y conocimiento};
+\node[ctrl, minimum width=5.6cm, minimum height=0.55cm] (gate) at (3.3,3.45) {\textbf{Compuerta de evaluación}\\suites propias y comunes, umbral por riesgo};
+\node[ctrl, minimum width=5.6cm, minimum height=0.45cm] (pol) at (3.3,2.6) {Identidad (SSO) · políticas de datos · presupuestos};
+\begin{scope}[on background layer]
+  \node[grupo, draw=ctrlbd, fill=ctrlbg!35, fit=(cons)(reg)(cmod)(corq)(gate)(pol), inner ysep=9pt] (CP) {};
+\end{scope}
+\node[titulo, text=ctrlbd, anchor=south west] at (CP.north west) {PLANO DE CONTROL};
+
+% ---------- Plano de ejecución ----------
+\node[exec, minimum width=7.6cm, minimum height=0.62cm] (api) at (12.05,6.55) {\textbf{API de agentes}\\compatible con OpenAI · auth · streaming};
+\node[exec, minimum width=7.6cm, minimum height=0.8cm] (rt) at (12.05,5.4) {\textbf{Runtime} (grafo construido desde el manifiesto)\\guard de entrada $\rightarrow$ agente $\leftrightarrow$ herramientas $\rightarrow$ guard de salida (por bloques)};
+\node[exec, minimum width=2.4cm, minimum height=0.95cm] (gw) at (9.45,3.75) {\textbf{Gateway de}\\\textbf{modelos}\\alias · llaves · costo\\enmascara PII};
+\node[exec, minimum width=2.4cm, minimum height=0.95cm] (mcp) at (12.05,3.75) {\textbf{Servidores MCP}\\lectura / escritura\\permisos por agente};
+\node[exec, minimum width=2.4cm, minimum height=0.95cm] (kn) at (14.65,3.75) {\textbf{Conocimiento}\\búsqueda híbrida\\filtros de vigencia};
+\begin{scope}[on background layer]
+  \node[grupo, draw=execbd, fill=execbg!35, fit=(api)(rt)(gw)(mcp)(kn), inner ysep=9pt] (EP) {};
+\end{scope}
+\node[titulo, text=execbd, anchor=south west] at (EP.north west) {PLANO DE EJECUCIÓN};
+
+% ---------- Externos ----------
+\node[dat, minimum width=2.4cm, minimum height=0.75cm] (prov) at (9.45,1.75) {\textbf{Proveedores LLM}\\API cerrada · abiertos};
+\node[dat, minimum width=4.4cm, minimum height=0.75cm] (sis) at (13.35,1.75) {\textbf{Sistemas de negocio}\\facturación · medidores · CRM · soporte};
+
+% ---------- Observabilidad ----------
+\node[obs, minimum width=16.0cm, minimum height=0.6cm] (obsv) at (8.0,0.35) {\textbf{OBSERVABILIDAD} · trazas OpenTelemetry por agente y versión · costo por agente y área · evaluación en línea · alertas e incidentes};
+
+% ---------- Flechas ----------
+\draw[flecha] (emp) -- (emp |- cons.north);
+\draw[flecha] (can) -- (can |- api.north);
+\draw[flecha] (aut) -- (aut |- api.north);
+\draw[flecha] (api) -- (rt);
+\draw[flecha] (rt.south -| gw) -- (gw);
+\draw[flecha] (rt.south -| mcp) -- (mcp);
+\draw[flecha] (rt.south -| kn) -- (kn);
+\draw[flecha] (gw) -- (prov);
+\draw[flecha] (mcp.south) -- (mcp.south |- sis.north);
+\draw[flecha] (kn.south) -- (kn.south |- sis.north);
+\draw[flechad, draw=ctrlbd, line width=0.9pt] (reg.east) -- node[etq, below, text=ctrlbd, yshift=-1pt]{manifiesto} (rt.west);
+\draw[flechad, draw=ctrlbd, line width=0.9pt] (CP.east |- gw.west) -- node[etq, above, text=ctrlbd, pos=0.45]{alias, permisos} (gw.west);
+\draw[flecha, draw=obsbd] ($(EP.south west)+(0.45,0)$) -- node[etq, text=obsbd]{trazas} ($(EP.south west)+(0.45,0)$ |- obsv.north);
+\draw[flecha, draw=obsbd] (obsv.north -| gate) ++(0,0) -- (pol.south) node[etq, midway, right, text=obsbd, xshift=2pt]{señales: calidad, costo, incidentes};
+\end{tikzpicture}

@@ -7,8 +7,8 @@
 # lo usan (ver plataforma/registro.py::verificar_recertificacion). Ningún
 # agente se toca.
 #
-# En el prototipo los tres alias corren local en Ollama, porque el reto pide un
-# LLM local. En producción la propuesta es API cerrada con retención cero
+# En el prototipo los tres alias corren local en Ollama, para que corra sin
+# llaves de API. En producción la propuesta es API cerrada con retención cero
 # (sección 2.8 del documento); el gateway no cambia, solo el `proveedor`.
 #
 # Sobre el precio: local no cuesta por token, pero el presupuesto por
@@ -72,7 +72,7 @@ embeddings:
   precio_usd_por_millon: { entrada: 0.02, salida: 0 }
 
 # ── Cómo se vería en producción (referencia, NO activo en el prototipo) ──
-# La demo corre 100 % local y sin llaves. En Bia, el mismo alias apuntaría a
+# La demo corre 100 % local y sin llaves. En producción, el mismo alias apuntaría a
 # un modelo cerrado por API con retención cero, servido a través de LiteLLM.
 # Ningún manifiesto cambia: solo estas líneas, y el cambio dispara la
 # re-certificación de todos los agentes del alias.

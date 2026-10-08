@@ -1,0 +1,96 @@
+% =====================================================================
+%  Agentes como configuracion gobernada - propuesta tecnica
+%  Compilar en Overleaf con pdfLaTeX (bibtex se ejecuta automaticamente)
+% =====================================================================
+\documentclass[11pt,a4paper]{article}
+
+% ---------- Idioma y fuentes ----------
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish,es-noshorthands,es-tabla,es-nolists]{babel}
+\usepackage{charter}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{microtype}
+
+% ---------- Pagina ----------
+\usepackage[margin=2.3cm,headheight=14pt]{geometry}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\setlist{nosep,leftmargin=1.4em}
+\setlength{\parskip}{4pt}
+\setlength{\parindent}{0pt}
+
+% ---------- Tablas, listados, cajas ----------
+\usepackage{booktabs,tabularx,array,multirow,longtable}
+\usepackage{xcolor}
+\usepackage[most]{tcolorbox}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{caption}
+\captionsetup{font=small,labelfont={bf,sf},skip=6pt}
+
+% ---------- Diagramas ----------
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta,fit,backgrounds,calc,shapes.geometric,
+  shapes.multipart,decorations.pathreplacing,shadows,babel}
+\usepackage{pgfgantt}
+
+% ---------- Referencias ----------
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage[hidelinks]{hyperref}
+\usepackage[nameinlink,noabbrev]{cleveref}
+\crefname{figure}{figura}{figuras}
+\Crefname{figure}{Figura}{Figuras}
+\crefname{table}{tabla}{tablas}
+\Crefname{table}{Tabla}{Tablas}
+\crefname{section}{sección}{secciones}
+\Crefname{section}{Sección}{Secciones}
+
+\input{estilos}
+
+% ---------- Flotantes: menos espacio en blanco ----------
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\bottomfraction}{0.8}
+\renewcommand{\textfraction}{0.07}
+\renewcommand{\floatpagefraction}{0.8}
+\setcounter{topnumber}{3}
+\setcounter{totalnumber}{5}
+\setcounter{tocdepth}{1}
+\makeatletter
+\renewcommand\l@section{\@dottedtocline{1}{0em}{1.6em}}
+\makeatother
+
+% ---------- Encabezados ----------
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\sffamily\scriptsize\color{docgris} Plataforma interna de agentes de IA}
+\fancyhead[R]{\sffamily\scriptsize\color{docgris} Daniel Felipe Diab Gonzalez · Propuesta técnica}
+\fancyfoot[C]{\sffamily\scriptsize\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+
+\titleformat{\section}{\sffamily\Large\bfseries\color{docink}}{\thesection}{0.6em}{}
+\titleformat{\subsection}{\sffamily\large\bfseries\color{docink}}{\thesubsection}{0.6em}{}
+\titleformat{\subsubsection}{\sffamily\normalsize\bfseries\color{docacento}}{}{0em}{}
+\titlespacing*{\section}{0pt}{14pt}{6pt}
+\titlespacing*{\subsection}{0pt}{10pt}{4pt}
+
+\begin{document}
+
+\input{sections/00-portada}
+\input{sections/01-introduccion}
+\input{sections/02-arquitectura}
+\input{sections/03-agente}
+\input{sections/04-constructor}
+\input{sections/05-evaluacion}
+\input{sections/06-caso}
+\input{sections/07-fases}
+\input{sections/08-cierre}
+
+\bibliographystyle{unsrtnat}
+\bibliography{referencias}
+
+\appendix
+\input{sections/09-anexos}
+
+\end{document}

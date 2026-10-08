@@ -1,0 +1,28 @@
+\section{Situación actual}
+\label{sec:intro}
+
+Una comercializadora de energía ya usa IA en varias áreas: un asistente de facturación en servicio al cliente, mensajes
+automáticos en cobranzas y resúmenes de llamadas en ventas. Cada uno funciona, pero cada uno
+se armó en una herramienta distinta, con su propio modelo, sus propias llaves y su propio
+acceso a datos de clientes (\cref{fig:islas}). El resultado es que nadie tiene la vista de
+conjunto.
+
+Esto tiene nombre en ingeniería de ML: cada agente aislado es un \emph{consumidor no
+declarado} de datos \citep{sculley2015hidden}, algo que usa información sensible sin que la
+organización lo sepa. Y el costo de no resolverlo es concreto: Gartner proyecta que más del
+40\,\% de los proyectos agénticos se cancelarán antes de 2027 por costos que se salen de
+control, valor poco claro o controles de riesgo insuficientes \citep{gartner2025agentic}. Las
+tres causas son exactamente lo que una capa común vuelve visible y controlable.
+
+\begin{figure}[!htbp]
+  \centering
+  \input{figures/f01-islas}
+  \caption{De islas a plataforma: los mismos agentes, declarados en un registro y ejecutados a
+  través de controles comunes.}
+  \label{fig:islas}
+\end{figure}
+
+El documento se organiza en torno a seis preguntas de diseño. Cada sección abre con la respuesta corta y
+cada decisión importante va acompañada de su razón y de la alternativa que descarté. Varias
+de esas decisiones vienen de errores que ya vi en sistemas agénticos que construí y operé en
+producción; cuando es así, lo digo.

@@ -1,7 +1,7 @@
 """API de agentes, compatible con OpenAI (decisión 2.2).
 
 Cada agente publicado aparece como un "modelo". Cualquier canal (chat interno,
-Slack, la app de Bia) se conecta con un cliente de OpenAI cambiando la URL y
+Slack, la app de clientes) se conecta con un cliente de OpenAI cambiando la URL y
 la llave, sin integración a la medida:
 
     curl localhost:8000/v1/chat/completions \\
@@ -12,7 +12,7 @@ Tres reglas que la API impone:
   - Solo sirve agentes `publicados`. Un borrador no existe para los canales.
   - El token identifica la sesión (SSO simulado en datos/sesiones.json) y de
     ahí sale el cliente. El cuerpo de la petición no puede cambiarlo.
-  - La conversación se identifica con el encabezado `X-Bia-Conversacion`; si
+  - La conversación se identifica con el encabezado `X-Charter-Conversacion`; si
     no llega, cada petición es una conversación nueva. De los `messages` que
     manda el cliente solo se toma el último del usuario: el historial
     autoritativo es el del runtime, no el que el canal dice que hubo.
@@ -48,7 +48,7 @@ async def ciclo_de_vida(app: FastAPI):
         yield
 
 
-app = FastAPI(title="Plataforma de agentes de Bia", version="0.1.0", lifespan=ciclo_de_vida)
+app = FastAPI(title="Charter: plataforma de agentes", version="0.1.0", lifespan=ciclo_de_vida)
 
 
 def _sesion(authorization: str | None) -> dict:
@@ -92,13 +92,13 @@ def modelos():
 
 @app.post("/v1/chat/completions")
 async def chat(p: PeticionChat, authorization: str | None = Header(None),
-               x_bia_conversacion: str | None = Header(None)):
+               x_charter_conversacion: str | None = Header(None)):
     sesion = _sesion(authorization)
     agente = await _agente(p.model)
     texto = next((x.content for x in reversed(p.messages) if x.role == "user"), "")
     if not texto:
         raise HTTPException(422, "Falta un mensaje del usuario.")
-    conversacion = x_bia_conversacion or uuid.uuid4().hex
+    conversacion = x_charter_conversacion or uuid.uuid4().hex
     creado = int(time.time())
 
     if not p.stream:
@@ -106,7 +106,7 @@ async def chat(p: PeticionChat, authorization: str | None = Header(None),
         return {
             "id": f"chatcmpl-{conversacion}", "object": "chat.completion", "created": creado, "model": p.model,
             "choices": [{"index": 0, "message": {"role": "assistant", "content": r.respuesta}, "finish_reason": "stop"}],
-            "bia": {"conversacion": conversacion, "herramientas": r.herramientas, "pendiente_confirmacion": r.pendiente,
+            "charter": {"conversacion": conversacion, "herramientas": r.herramientas, "pendiente_confirmacion": r.pendiente,
                     "costo_usd": trazas.costo_conversacion(conversacion), "version_agente": agente.m.version},
         }
 
@@ -123,7 +123,7 @@ async def chat(p: PeticionChat, authorization: str | None = Header(None),
             yield f"data: {json.dumps(chunk, ensure_ascii=False)}\n\n"
         yield "data: [DONE]\n\n"
 
-    return StreamingResponse(eventos(), media_type="text/event-stream", headers={"X-Bia-Conversacion": conversacion})
+    return StreamingResponse(eventos(), media_type="text/event-stream", headers={"X-Charter-Conversacion": conversacion})
 
 
 class Retro(BaseModel):

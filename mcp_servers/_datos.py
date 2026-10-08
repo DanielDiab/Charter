@@ -1,5 +1,5 @@
 """Acceso a los datos sintéticos (datos/*.json). Hace las veces de las API de
-facturación, medición y tarifas que Bia tendría que exponer (uno de los cinco
+facturación, medición y tarifas que la comercializadora tendría que exponer (uno de los cinco
 supuestos a validar la primera semana, sección 8)."""
 
 import json

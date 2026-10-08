@@ -1,6 +1,6 @@
 # Catálogo de herramientas (inventario de orquestación, parte 1)
 #
-# Cada sistema de Bia se conecta UNA vez como servidor MCP y queda disponible
+# Cada sistema de la comercializadora se conecta UNA vez como servidor MCP y queda disponible
 # para todo agente que lo declare en su manifiesto. Lo que no está declarado,
 # el runtime no lo carga: el agente ni siquiera sabe que existe.
 #

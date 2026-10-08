@@ -1,0 +1,26 @@
+\begin{tikzpicture}[x=1cm,y=1cm, capa/.style={ctrl, text width=3.0cm, minimum height=0.95cm}]
+% ---- Antes
+\node[titulo, text=ctrlbd] at (0.4,2.2) {ANTES DE PUBLICAR};
+\node[neut, text width=2.0cm, minimum height=0.9cm] (cand) at (0,0) {\textbf{Versión candidata}};
+\node[capa] (c1) at (3.3,1.2)  {\textbf{Capa 1 · suite propia}\\deterministas + juez con rúbrica};
+\node[capa] (c2) at (3.3,0)    {\textbf{Capa 2 · suite común}\\inyección, PII, alcance, jailbreak};
+\node[capa] (c3) at (3.3,-1.2) {\textbf{Capa 3 · costo y latencia}\\contra el presupuesto};
+\node[dec, minimum width=2.3cm, minimum height=1.25cm, font=\sffamily\tiny] (g) at (6.6,0) {¿Supera el\\umbral de\\su riesgo?};
+\node[exec, text width=1.8cm, minimum height=0.9cm] (pub) at (9.3,0) {\textbf{Publicado}\\(canario si aplica)};
+\foreach \c in {c1,c2,c3}{\draw[flecha] (cand.east) -- (\c.west); \draw[flecha] (\c.east) -- (g);}
+\draw[flecha] (g) -- node[etq, above]{sí} (pub);
+\draw[flecha, draw=riskbd] (g.south) -- (6.6,-1.95) -| node[etq, pos=0.25, below, text=riskbd]{no: vuelve a borrador con el reporte} ($(cand.south)+(0.3,0)$);
+% ---- Después
+\node[titulo, text=obsbd] at (13.2,2.25) {EN PRODUCCIÓN};
+\node[obs, text width=2.9cm] (m1) at (13.2,1.3) {\textbf{Muestreo + juez}\\mismos checks que la compuerta};
+\node[obs, text width=2.9cm] (m2) at (13.2,0.1) {\textbf{Métricas y alertas}\\calidad, seguridad, costo};
+\node[obs, text width=2.9cm] (m3) at (13.2,-1.1) {\textbf{Retroalimentación}\\de usuarios y correcciones};
+\draw[flecha] (pub.east) -- (m1.west);
+\draw[flecha] (pub.east) -- (m2.west);
+\draw[flecha] (pub.east) -- (m3.west);
+\node[risk, text width=4.6cm] (inc) at (12.1,-2.65) {\textbf{Falla detectada} $\rightarrow$ caso nuevo en la suite; si es grave, suspensión};
+\draw[flecha, draw=riskbd] (m3.south) -- (m3.south |- inc.north);
+\draw[flecha, draw=riskbd] (inc.west) -- node[etq, above, pos=0.3, text=riskbd]{re-certificación con el caso nuevo} (-0.3,-2.65) -- ($(cand.south)+(-0.3,0)$);
+\node[ctrl, text width=2.6cm, font=\sffamily\tiny] (cal) at (6.0,1.75) {Juez calibrado contra etiquetas humanas};
+\draw[flechad, draw=ctrlbd] (cal.west) -| ($(c1.north east)+(-0.3,0)$);
+\end{tikzpicture}

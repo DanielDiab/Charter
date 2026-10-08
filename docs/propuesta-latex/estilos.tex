@@ -1,0 +1,77 @@
+% ---------- Paleta ----------
+\definecolor{docink}{HTML}{14213D}      % texto de titulos
+\definecolor{docacento}{HTML}{0F766E}   % acento (teal)
+\definecolor{docgris}{HTML}{6B7280}
+\definecolor{ctrlbg}{HTML}{E0ECFF}      % plano de control
+\definecolor{ctrlbd}{HTML}{2F5DA8}
+\definecolor{execbg}{HTML}{DDF3EA}      % plano de ejecucion
+\definecolor{execbd}{HTML}{1C7A55}
+\definecolor{obsbg}{HTML}{FFF1D6}       % observabilidad
+\definecolor{obsbd}{HTML}{B7791F}
+\definecolor{databg}{HTML}{EEE6FA}      % datos y sistemas
+\definecolor{databd}{HTML}{6B46C1}
+\definecolor{riskbg}{HTML}{FDE2E2}      % riesgo / bloqueo
+\definecolor{riskbd}{HTML}{B42318}
+\definecolor{neutbg}{HTML}{F3F4F6}
+\definecolor{neutbd}{HTML}{4B5563}
+
+% ---------- Estilos TikZ ----------
+\tikzset{
+  base/.style={draw, rounded corners=2.5pt, align=center, font=\sffamily\scriptsize,
+               execute at begin node={\hyphenpenalty=10000\exhyphenpenalty=10000},
+               inner sep=3pt, line width=0.6pt},
+  ctrl/.style={base, fill=ctrlbg, draw=ctrlbd},
+  exec/.style={base, fill=execbg, draw=execbd},
+  obs/.style={base, fill=obsbg, draw=obsbd},
+  dat/.style={base, fill=databg, draw=databd},
+  risk/.style={base, fill=riskbg, draw=riskbd},
+  neut/.style={base, fill=neutbg, draw=neutbd},
+  plain/.style={align=center, font=\sffamily\scriptsize},
+  dec/.style={diamond, aspect=2.1, draw=neutbd, fill=white, line width=0.6pt,
+              font=\sffamily\scriptsize, align=center, inner sep=1pt},
+  grupo/.style={draw, rounded corners=5pt, dashed, line width=0.7pt, inner sep=7pt},
+  titulo/.style={font=\sffamily\bfseries\scriptsize, align=center},
+  flecha/.style={-{Stealth[length=5pt,width=4pt]}, line width=0.7pt, draw=neutbd},
+  flechad/.style={flecha, dashed},
+  etq/.style={font=\sffamily\tiny, align=center, fill=white, inner sep=1.2pt},
+}
+
+% ---------- Cajas ----------
+\newtcolorbox{tesis}{enhanced, colback=docacento!6, colframe=docacento, boxrule=0.8pt,
+  arc=3pt, left=8pt, right=8pt, top=6pt, bottom=6pt,
+  fonttitle=\sffamily\bfseries, title={TL;DR · Resumen ejecutivo}}
+\newtcolorbox{nota}[1][]{enhanced, colback=neutbg, colframe=neutbd!60, boxrule=0.5pt,
+  arc=2pt, left=6pt, right=6pt, top=4pt, bottom=4pt, fonttitle=\sffamily\bfseries\small,
+  title=#1}
+\newtcolorbox{respuesta}{enhanced, colback=white, colframe=docink, boxrule=0.6pt, arc=2pt,
+  left=6pt, right=6pt, top=4pt, bottom=4pt, borderline west={3pt}{0pt}{docacento},
+  fonttitle=\sffamily\bfseries\small, title=En resumen}
+
+% ---------- Listados (YAML) ----------
+\lstdefinelanguage{yaml}{
+  keywords={true,false,null}, sensitive=false,
+  comment=[l]{\#}, morestring=[b]', morestring=[b]"}
+\lstset{
+  basicstyle=\ttfamily\scriptsize, columns=fullflexible, keepspaces=true,
+  backgroundcolor=\color{neutbg}, frame=single, rulecolor=\color{neutbd!40},
+  framesep=4pt, xleftmargin=4pt, xrightmargin=4pt, breaklines=true,
+  commentstyle=\color{docgris}\itshape, keywordstyle=\color{docacento}\bfseries,
+  stringstyle=\color{databd},
+  literate={á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1 {ñ}{{\~n}}1
+           {Á}{{\'A}}1 {É}{{\'E}}1 {Ó}{{\'O}}1 {→}{{$\rightarrow$}}1
+}
+
+% ---------- Utilidades ----------
+\newcommand{\pregunta}[1]{\par\smallskip{\sffamily\small\color{docgris}Pregunta del caso: \emph{#1}}\par\smallskip}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\renewcommand{\lstlistingname}{Listado}
+
+% ---------- Tarjeta de decision ----------
+\newcommand{\decision}[3]{%
+\begin{tcolorbox}[enhanced, colback=docacento!4, colframe=docacento!45, boxrule=0.4pt, arc=2pt,
+  left=5pt, right=5pt, top=2pt, bottom=2pt, before skip=4pt, after skip=4pt, fontupper=\small]
+{\sffamily\bfseries\color{docacento}Decisión:} #1\\
+{\sffamily\bfseries Por qué:} #2\\
+{\sffamily\bfseries\color{docgris}Descarté:} #3
+\end{tcolorbox}}

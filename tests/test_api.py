@@ -18,7 +18,7 @@ async def cliente():
     # otro loop) las sesiones MCP abiertas en el lifespan quedaban en un loop
     # distinto al de la petición y la llamada se cancelaba.
     async with app.router.lifespan_context(app):
-        async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://bia") as c:
+        async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://test") as c:
             yield c
 
 
@@ -30,7 +30,7 @@ def _publicar(nombre: str):
         registro.guardar_reporte(m.id, m.version, {"aprobado": True, "resumen": "prueba",
                                                    "huella_manifiesto": catalogo.huella(m.a_yaml())})
         for rol in registro.APROBACIONES[registro.obtener(m.id, m.version)[1]["riesgo"]]:
-            registro.aprobar(m.id, m.version, rol, "prueba@bia.app")
+            registro.aprobar(m.id, m.version, rol, "prueba@energia.example")
         registro.publicar(m.id, m.version)
 
 
@@ -59,7 +59,7 @@ async def test_el_cliente_sale_del_token(guion):
                          "messages": [{"role": "user", "content": "¿cuál es mi saldo?"}]})).json()
     # El modelo pidió CLI-001, pero el token es de CLI-002: el saldo es el de CLI-002.
     assert r["choices"][0]["message"]["content"] == "Tu saldo es 18.106.880 pesos."
-    assert r["bia"]["herramientas"] == ["facturacion/consultar_factura"]
+    assert r["charter"]["herramientas"] == ["facturacion/consultar_factura"]
 
 
 async def test_inventarios_por_api():

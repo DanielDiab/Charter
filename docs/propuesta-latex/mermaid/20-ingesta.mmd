@@ -1,0 +1,8 @@
+flowchart LR
+  subgraph Ingesta
+    F[Fuentes] --> C1[Conversión] --> M[Metadatos: dueño, vigencia] --> T[Troceo por tipo] --> IX[(BM25 + pgvector)]
+  end
+  subgraph Consulta
+    Q[Pregunta] --> FI[Filtro vigencia y permisos] --> H[Búsqueda híbrida] --> RRF[Fusión RRF top-5] --> A[Al agente con cita]
+  end
+  IX -.-> H

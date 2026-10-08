@@ -1,0 +1,6 @@
+flowchart LR
+  C0[Cartera vencida] --> C1[Reglas Ley 2300]
+  C1 -- no apto --> RP[Reprogramar]
+  C1 --> C2[LLM redacta en plantilla] --> C3[Validador] --> C4[Aprobación humana L4] --> C5[Envío y registro]
+  C3 -. no coincide .-> C2
+  C4 -. rechazo .-> C2

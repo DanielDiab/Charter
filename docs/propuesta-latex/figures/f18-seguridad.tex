@@ -1,0 +1,17 @@
+\begin{tikzpicture}[x=1cm,y=1cm]
+\foreach \i/\c/\capa/\que/\riesgo in {
+  0/ctrl/{1. Identidad}/{SSO; el sujeto (cliente) sale de la sesión, nunca del texto}/{consultar datos de otro cliente},
+  1/risk/{2. Guard de entrada}/{clasificador de inyección y de alcance; límites de longitud}/{inyección directa},
+  2/ctrl/{3. Permisos y autonomía}/{herramientas declaradas; escritura con confirmación; nivel L1--L4}/{agencia excesiva},
+  3/dat/{4. Lo recuperado es dato}/{resultados de herramientas y RAG marcados como no confiables}/{inyección indirecta},
+  4/risk/{5. Guard de salida por bloques}/{cifras verificadas contra herramientas; PII ajena; reglas internas}/{fuga de datos o del prompt},
+  5/obs/{6. Trazas y presupuestos}/{PII enmascarada antes de persistir; tope por conversación y mes}/{exposición en logs; costo sin límite}}{
+  \node[\c, text width=2.9cm, minimum height=0.62cm, anchor=west, font=\sffamily\scriptsize\bfseries] (k\i) at (0,-0.78*\i) {\capa};
+  \node[plain, text width=7.6cm, anchor=west, align=left] at (3.35,-0.78*\i) {\que};
+  \node[plain, text width=3.6cm, anchor=west, align=left, text=riskbd] at (11.3,-0.78*\i) {\riesgo};
+}
+\node[titulo, anchor=west] at (0,0.62) {CAPA};
+\node[titulo, anchor=west] at (3.35,0.62) {QUÉ HACE};
+\node[titulo, anchor=west, text=riskbd] at (11.3,0.62) {QUÉ DETIENE (OWASP LLM)};
+\draw[-{Stealth[length=6pt]}, line width=1.2pt, draw=docacento] (-0.35,0.35) -- (-0.35,-4.25) node[midway, left, font=\sffamily\tiny, text=docacento, align=center]{orden\\en cada\\petición};
+\end{tikzpicture}

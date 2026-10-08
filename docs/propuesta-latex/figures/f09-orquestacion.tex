@@ -1,0 +1,34 @@
+\begin{tikzpicture}[x=1cm,y=1cm, pn/.style={grupo, draw=neutbd!70, minimum width=5.05cm, minimum height=4.6cm}]
+% ---- Panel A
+\node[pn] (A) at (0,0) {};
+\node[titulo, anchor=north] at (A.north) {(a) AGENTE ÚNICO + HERRAMIENTAS};
+\node[exec, minimum width=1.9cm, minimum height=0.6cm] (ag) at (0,0.75) {\textbf{Agente}\\razona y actúa};
+\node[dat, font=\sffamily\tiny] (t1) at (-1.55,-0.6) {herramienta};
+\node[dat, font=\sffamily\tiny] (t2) at (0,-0.6) {herramienta};
+\node[dat, font=\sffamily\tiny] (t3) at (1.55,-0.6) {conocimiento};
+\foreach \t in {t1,t2,t3}{\draw[flecha, {Stealth[length=4pt]}-{Stealth[length=4pt]}] (ag) -- (\t);}
+\node[plain, text width=4.6cm, font=\sffamily\tiny, anchor=south] at ($(A.south)+(0,0.12)$) {\textbf{Cuándo:} un alcance de permisos, un tier, evaluable como un todo. \textbf{Por defecto.}};
+% ---- Panel B
+\node[pn] (B) at (5.45,0) {};
+\node[titulo, anchor=north] at (B.north) {(b) FLUJO DETERMINISTA};
+\node[ctrl, font=\sffamily\tiny] (b1) at (5.45,1.15) {paso 1 · código};
+\node[exec, font=\sffamily\tiny] (b2) at (5.45,0.35) {paso 2 · LLM acotado};
+\node[ctrl, font=\sffamily\tiny] (b3) at (5.45,-0.45) {paso 3 · validación};
+\node[neut, font=\sffamily\tiny] (b4) at (5.45,-1.2) {aprobación humana};
+\draw[flecha] (b1) -- (b2); \draw[flecha] (b2) -- (b3); \draw[flecha] (b3) -- (b4);
+\node[plain, text width=4.6cm, font=\sffamily\tiny, anchor=south] at ($(B.south)+(0,0.12)$) {\textbf{Cuándo:} proceso regulado o irreversible. \textbf{El código decide el flujo.}};
+% ---- Panel C
+\node[pn] (C) at (10.9,0) {};
+\node[titulo, anchor=north] at (C.north) {(c) SUPERVISOR + ESPECIALISTAS};
+\node[exec, minimum width=1.8cm] (sup) at (10.9,1.05) {\textbf{Supervisor}};
+\node[exec, font=\sffamily\tiny] (e1) at (9.55,-0.3) {especialista A};
+\node[exec, font=\sffamily\tiny] (e2) at (12.25,-0.3) {especialista B};
+\draw[flecha] (sup) -- node[etq, left, xshift=-2pt]{traspaso\\tipado} (e1);
+\draw[flecha] (sup) -- (e2);
+\draw[flechad] (e1) -- (e2);
+\node[plain, text width=4.6cm, font=\sffamily\tiny, anchor=south] at ($(C.south)+(0,0.12)$) {\textbf{Cuándo:} permisos o tiers distintos por parte, exploración de bajo riesgo. \textbf{El LLM decide.}};
+% ---- preferencia
+\draw[{Stealth[length=6pt]}-{Stealth[length=6pt]}, line width=1.1pt, draw=docacento] (-2.4,-2.7) -- (13.3,-2.7);
+\node[etq, text=docacento, font=\sffamily\scriptsize, anchor=north west] at (-2.4,-2.78) {más simple y auditable};
+\node[etq, text=docacento, font=\sffamily\scriptsize, anchor=north east] at (13.3,-2.78) {más flexible y difícil de verificar};
+\end{tikzpicture}

@@ -1,0 +1,17 @@
+\begin{tikzpicture}[x=1cm,y=1cm, s/.style={exec, text width=2.3cm, minimum height=1.0cm}, q/.style={ctrl, text width=2.3cm, minimum height=1.0cm}]
+\node[titulo, anchor=west, text=execbd] at (-1.2,1.0) {INGESTA (cuando cambia un documento)};
+\node[dat, text width=2.0cm, minimum height=1.0cm] (f) at (0,0) {\textbf{Fuentes}\\PDF, Word, web, tablas};
+\node[s] (i1) at (2.9,0) {\textbf{Conversión}\\texto + OCR si hace falta};
+\node[s] (i2) at (5.9,0) {\textbf{Metadatos}\\dueño, vigencia, clasificación};
+\node[s] (i3) at (8.9,0) {\textbf{Troceo por tipo}\\sección, par P/R, tabla};
+\node[dat, text width=2.3cm, minimum height=1.0cm] (ix) at (11.9,0) {\textbf{Índices}\\BM25 + vectores (pgvector)};
+\foreach \a/\b in {f/i1,i1/i2,i2/i3,i3/ix}{\draw[flecha] (\a) -- (\b);}
+\node[titulo, anchor=west, text=ctrlbd] at (-1.2,-1.45) {CONSULTA (en cada pregunta)};
+\node[neut, text width=2.0cm, minimum height=1.0cm] (p) at (0,-2.45) {\textbf{Pregunta}\\del agente};
+\node[q] (q1) at (2.9,-2.45) {\textbf{Filtro}\\vigencia y permisos \emph{antes} de buscar};
+\node[q] (q2) at (5.9,-2.45) {\textbf{Búsqueda híbrida}\\palabras clave + semántica};
+\node[q] (q3) at (8.9,-2.45) {\textbf{Fusión RRF}\\y top-5};
+\node[exec, text width=2.3cm, minimum height=1.0cm] (q4) at (11.9,-2.45) {\textbf{Al agente}\\como dato, con cita};
+\foreach \a/\b in {p/q1,q1/q2,q2/q3,q3/q4}{\draw[flecha] (\a) -- (\b);}
+\draw[flechad] (ix.south) -- ++(0,-0.55) -| (q2.north);
+\end{tikzpicture}

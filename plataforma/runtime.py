@@ -25,7 +25,7 @@ Las capas de seguridad de la figura 7 viven aquí y no en las instrucciones:
   5. Salida      guards.revisar_bloque por bloque antes de emitir.
   6. Trazas      cada nodo deja span; el gateway aplica el presupuesto.
 
-Herencia del agente del curso: el tope de iteraciones como red de seguridad,
+Herencia de un agente anterior: el tope de iteraciones como red de seguridad,
 la recuperación de tool calls con formato corrupto (frecuente en modelos
 locales pequeños) y convertir errores de herramienta en mensajes en vez de
 tumbar el grafo.
@@ -57,7 +57,7 @@ MAX_ITERACIONES = 8
 MAX_LLAMADAS_POR_HERRAMIENTA = 2
 # "Voy a consultar", "vamos a hacerlo ahora", "podemos consultar el inventario"
 # sin un tool call: el modelo narra la acción en vez de ejecutarla. Fue la falla
-# más repetida del agente del curso y reapareció en la compuerta del Arquitecto.
+# más repetida en un agente anterior y reapareció en la compuerta del Arquitecto.
 _VERBOS = r"(?:consultar|revisar|verificar|buscar|obtener|llamar|hacerlo|proceder|ejecutar|generar|guardar|registrar|crear|proponer|ver\b)"
 _NARRA_ACCION = re.compile(
     r"\b(?:voy|vamos|procedo|procedemos|podemos|puedo|necesitamos|necesito|d[eé]jame|perm[ií]teme)\s+(?:a\s+)?" + _VERBOS
@@ -65,7 +65,7 @@ _NARRA_ACCION = re.compile(
 _AFIRMATIVO = re.compile(r"^\s*(s[ií]|dale|confirmo|de acuerdo|ok|okay|h[aá]zlo|h[aá]galo|claro|adelante|correcto)\b", re.I)
 
 RESPUESTA_TOPE = "No logré resolver esto en esta conversación. Si quieres, abro un caso para que un asesor te ayude."
-RESPUESTA_PRESUPUESTO = "Esta conversación alcanzó su límite. Para seguir, un asesor puede ayudarte por los canales de Bia."
+RESPUESTA_PRESUPUESTO = "Esta conversación alcanzó su límite. Para seguir, un asesor puede ayudarte por los canales de atención."
 
 
 class Estado(TypedDict, total=False):

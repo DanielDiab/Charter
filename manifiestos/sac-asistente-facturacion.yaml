@@ -1,12 +1,12 @@
 # Manifiesto del asistente de facturación: el del apéndice A del documento.
 # Es el caso aplicado de la sección 6. Lo que no está aquí, el agente no lo
 # puede hacer: no tiene más herramientas, colecciones ni modelo que estos.
-apiVersion: bia.ai/v1
+apiVersion: charter/v1
 kind: Agent
 metadata:
   id: sac-asistente-facturacion
   version: 1.3.0
-  owner: lider.sac@bia.app          # sin dueño no se publica
+  owner: lider.sac@energia.example          # sin dueño no se publica
   area: servicio-al-cliente
   archetype: asistente-con-datos
 spec:

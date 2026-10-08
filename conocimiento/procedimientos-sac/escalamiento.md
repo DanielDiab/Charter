@@ -1,6 +1,6 @@
 ---
 titulo: Escalamiento a asesor humano
-dueno: lider.sac@bia.app
+dueno: lider.sac@energia.example
 vigente_desde: 2026-03-01
 clasificacion: interna
 ---

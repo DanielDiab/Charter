@@ -1,0 +1,16 @@
+\begin{tikzpicture}[x=1cm,y=1cm]
+\def\R{2.25}
+\node[titulo, text=docacento, font=\sffamily\bfseries\small] at (0,0) {Volante\\de datos};
+\foreach \ang/\n/\s/\t in {90/n1/exec/{\textbf{Agente en producción}\\versión certificada},
+                          18/n2/obs/{\textbf{Trazas + correcciones}\\pares ``antes y después''},
+                          -54/n3/dat/{\textbf{Conjunto curado}\\etiquetado y sin PII},
+                          -126/n4/ctrl/{\textbf{Suites más ricas}\\casos reales de falla},
+                          162/n5/ctrl/{\textbf{Mejora}\\instrucciones, ejemplos o,\\con señal, fine-tuning}}{
+  \node[\s, text width=2.75cm] (\n) at ({3.7*cos(\ang)},{2.05*sin(\ang)}) {\t};
+}
+\foreach \a/\b in {n1/n2,n2/n3,n3/n4,n4/n5,n5/n1}{
+  \draw[flecha, line width=0.9pt, draw=docacento] (\a) to[bend left=18] (\b);
+}
+\node[risk, text width=3.0cm, font=\sffamily\tiny] (sen) at (-7.1,1.35) {\textbf{Señal para fine-tuning}\\techo de calidad con instrucciones \emph{y} costo relevante \emph{y} miles de pares validados};
+\draw[flechad, draw=riskbd] (sen.east) -- (n5.west);
+\end{tikzpicture}

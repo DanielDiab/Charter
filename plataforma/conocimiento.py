@@ -133,7 +133,7 @@ async def ingestar(gateway=None) -> dict:
 def cargar_indice() -> list[dict]:
     ruta = config().estado_dir / "indice.json"
     if not ruta.exists():
-        raise FileNotFoundError("No hay índice de conocimiento. Corre `bia iniciar`.")
+        raise FileNotFoundError("No hay índice de conocimiento. Corre `charter iniciar`.")
     return json.loads(ruta.read_text(encoding="utf-8"))
 
 

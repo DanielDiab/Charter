@@ -1,0 +1,10 @@
+flowchart LR
+  S[Tarea nueva] --> D1{¿Datos restringidos?}
+  D1 -- sí --> O1[No va al modelo]
+  D1 -- no --> D2{¿Datos de clientes?}
+  D2 -- sí --> O2[Solo proveedores con retención cero] --> D3
+  D2 -- no --> D3{¿Estrecha y de alto volumen?}
+  D3 -- sí --> T1[Tier rapido]
+  D3 -- no --> D4{¿Planifica varios pasos?}
+  D4 -- sí --> T2[Tier razonamiento]
+  D4 -- no --> T3[Tier estandar]

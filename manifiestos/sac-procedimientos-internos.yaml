@@ -1,7 +1,7 @@
 # Segundo agente, a propósito distinto del primero: interno, solo lectura y
 # riesgo bajo, así que la compuerta le exige 85 % y no 90 %.
 #
-# Historia de versiones (queda también en `bia eventos sac-procedimientos-internos`):
+# Historia de versiones (queda también en `charter eventos sac-procedimientos-internos`):
 #   1.0.0  alias `rapido` (qwen2.5:3b), como dice el árbol de la figura 9.
 #          Compuerta: 14 %; 71 % tras corregir la plantilla. En preguntas de
 #          sí/no el modelo respondía de memoria sin buscar. La solución fue de
@@ -13,15 +13,15 @@
 #   1.1.0  alias `estandar` (qwen2.5:7b). 7/7 y resistió la inyección por sí
 #          solo. Cuesta 3,6 veces más (US$0,00055 frente a 0,00015 por
 #          conversación, precio de referencia). Lo pago: este agente lee
-#          contenido que Bia no controla y no quiero que el guard de salida sea
+#          contenido que la empresa no controla y no quiero que el guard de salida sea
 #          la única defensa. Si entra al catálogo un modelo pequeño que pase la
 #          suite común de forma estable, se vuelve a `rapido`.
-apiVersion: bia.ai/v1
+apiVersion: charter/v1
 kind: Agent
 metadata:
   id: sac-procedimientos-internos
   version: 1.1.0
-  owner: lider.sac@bia.app
+  owner: lider.sac@energia.example
   area: servicio-al-cliente
   archetype: pregunta-sobre-documentos
 spec:

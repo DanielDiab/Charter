@@ -1,0 +1,314 @@
+\section{Arquitectura propuesta}
+\label{sec:arq}
+\begin{respuesta}
+Dos planos y una capa transversal. El \textbf{plano de control} decide \emph{qué} puede existir
+(registro, catálogos, constructor, compuerta de evaluación, políticas). El \textbf{plano de
+ejecución} decide \emph{cómo} corre (API de agentes, runtime, gateway de modelos, servidores
+de herramientas y conocimiento). La \textbf{observabilidad} registra todo y devuelve señales
+al plano de control.
+\end{respuesta}
+
+La arquitectura está pensada para que la experiencia sea lo más fluida posible para las dos
+personas que la usan: quien crea un agente (lo arma conversando, lo prueba y lo publica sin
+abrir un ticket) y quien conversa con él (respuestas que fluyen, con datos reales y sin
+fricción). Parte importante del proceso fue \textbf{condensar la arquitectura} para minimizar
+costos, evitar piezas móviles que puedan fallar y no dejar complejidad de legado a los
+desarrolladores que vengan después: un solo runtime, un solo gateway, una sola base de datos
+y una sola API para todos los agentes.
+
+Todas las decisiones que siguen salen de seis principios, y son ellos los que deberían
+sobrevivir si mañana cambian las herramientas concretas:
+\begin{enumerate}[label=\textbf{P\arabic*.}, leftmargin=2.2em]
+  \item El agente es configuración declarativa, no código.
+  \item Existe un solo camino a producción, y es el más fácil.
+  \item Los agentes piden capacidades, no modelos.
+  \item Lo que se recupera (documentos, herramientas) es dato, nunca instrucción.
+  \item Nada se publica ni cambia sin evaluación.
+  \item La solución más simple que funcione \citep{anthropic2024effective}.
+\end{enumerate}
+
+% --------------------------------------------------------------
+\subsection{Contexto}
+\begin{figure}[!htbp]
+  \centering
+  \input{figures/f16-contexto}
+  \caption{Vista de contexto. A la izquierda, las personas que crean, curan y aprueban; a la
+  derecha, los sistemas externos. La plataforma es el único punto de contacto entre ambos.}
+  \label{fig:contexto}
+\end{figure}
+
+Cuatro tipos de personas usan la plataforma con papeles distintos: los creadores de cada
+área, el equipo de IA que cura catálogos y plantillas, cumplimiento que aprueba lo de riesgo
+alto, y los clientes que conversan con los agentes publicados (\cref{fig:contexto}).
+
+% --------------------------------------------------------------
+\subsection{Componentes y stack}
+La \cref{fig:arquitectura} muestra los componentes y la \cref{tab:stack} el stack con que los
+implemento. Estas son las decisiones que los definen.
+
+\begin{figure}[!htbp]
+  \centering
+  \input{figures/f03-arquitectura}
+  \caption{Componentes. Azul: plano de control. Verde: plano de ejecución. Ámbar:
+  observabilidad. Punteado: configuración; continuo: ejecución.}
+  \label{fig:arquitectura}
+\end{figure}
+
+\begin{table}[!htbp]
+\centering\small
+\caption{Stack propuesto. Todo es de código abierto o estándar, y todo corre dentro de la
+infraestructura de la empresa salvo los proveedores de modelos.}
+\label{tab:stack}
+\renewcommand{\arraystretch}{1.1}
+\begin{tabularx}{\textwidth}{@{}L{3.6cm}L{4.4cm}Y@{}}
+\toprule
+\textbf{Pieza} & \textbf{Tecnología} & \textbf{Rol}\\
+\midrule
+Runtime de agentes & \textbf{LangGraph} (Python) & Convierte cada manifiesto en un grafo ejecutable\\
+API y plano de control & FastAPI + Pydantic & API compatible con OpenAI, registro, validación del manifiesto\\
+Gateway de modelos & LiteLLM & Alias, llaves, costo, reintentos y respaldo\\
+Herramientas & Servidores MCP & Conectores a facturación, medición, CRM y soporte\\
+Datos & PostgreSQL + pgvector & Registro, vectores, estado de conversaciones\\
+Observabilidad & Langfuse + OpenTelemetry & Trazas, costos y evaluación en línea\\
+Consola y constructor & Aplicación web & Inventarios, constructor conversacional, aprobaciones\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\decision{Arquitectura condensada: un runtime, un gateway, una base de datos, una API.}
+{Cada pieza adicional es algo más que puede fallar, que hay que pagar y que alguien tendrá que
+mantener. Con estas cuatro se cubren todos los agentes de la empresa; lo demás se agrega solo cuando
+un caso real lo pida.}
+{Microservicios por capacidad, colas y una base de datos por función desde el primer día.}
+
+\decision{LangGraph como framework de agentes.}
+{Modela cada agente como un grafo de estados explícito, que es justo lo que produce un
+manifiesto: se puede leer, probar y auditar paso a paso. Guarda el estado en PostgreSQL, así
+que una conversación se reanuda después de una aprobación humana (necesario para L4), y trae
+streaming nativo. Además, ya lo he llevado a producción.}
+{Marcos multiagente conversacionales (el flujo queda implícito en la charla entre agentes y es
+difícil de auditar) y un orquestador propio (otro framework que mantener).}
+
+\decision{Separar plano de control y plano de ejecución.}
+{Lo que cambia poco y requiere aprobación (qué agentes existen, con qué permisos) no debe
+mezclarse con lo que corre miles de veces al día. Se escalan, despliegan y auditan por
+separado.}
+{Un servicio monolítico por agente, que es exactamente la situación actual.}
+
+\decision{El gateway es el único componente con llaves de proveedores.}
+{Así cada llamada a un modelo queda atribuida a un agente y un área, con costo y política de
+datos aplicados en un solo lugar. ``¿Cuánto cuesta cada agente?'' se vuelve una consulta.}
+{Llaves por equipo o por agente: es la causa de que hoy nadie sepa cuánto se gasta.}
+
+\decision{Herramientas expuestas por MCP \citep{mcp2025spec}.}
+{Cada sistema de la empresa se conecta una vez y queda disponible para todo agente autorizado, con
+operaciones de lectura y escritura separadas y permisos declarados en el manifiesto.}
+{Funciones embebidas en cada agente: se reimplementan, se revisan N veces y nadie sabe quién
+puede escribir en qué.}
+
+\decision{API de agentes compatible con OpenAI.}
+{Cada agente publicado aparece como un ``modelo'': cualquier canal (chat interno, Slack, app
+de clientes) se conecta sin integración a la medida. Ya lo he operado en producción.}
+{Una API propia por canal.}
+
+% --------------------------------------------------------------
+\subsection{Una consulta de punta a punta}
+\begin{figure}[!htbp]
+  \centering
+  \input{figures/f04-secuencia}
+  \caption{Una consulta de factura de punta a punta. Cada flecha deja un registro en la traza
+  con agente, versión, modelo, tokens, costo y latencia.}
+  \label{fig:secuencia}
+\end{figure}
+
+La \cref{fig:secuencia} sigue el proceso donde la plataforma entra primero: las consultas
+de factura que hoy atiende un asesor. Dos detalles sostienen la seguridad sin sacrificar la
+experiencia. El identificador del cliente lo pone el runtime desde la sesión (paso 4), así
+que el agente no puede consultar a otra empresa aunque se lo pidan. Y el guard de salida
+valida la respuesta por bloques (paso 6): el cliente la ve aparecer mientras se escribe, pero
+ningún bloque sale sin haber sido revisado.
+
+% --------------------------------------------------------------
+\subsection{Despliegue}
+\begin{figure}[!htbp]
+  \centering
+  \input{figures/f17-despliegue}
+  \caption{Despliegue en la nube de la empresa. El gateway es la única salida hacia proveedores de
+  modelos; las trazas y los índices quedan dentro de la red privada.}
+  \label{fig:despliegue}
+\end{figure}
+
+\decision{Todo en contenedores dentro de la red de la empresa, con PostgreSQL como almacén único
+(registro, vectores con pgvector y estado de conversaciones).}
+{El volumen de la empresa no justifica una base vectorial dedicada; un solo motor simplifica
+respaldos, permisos y operación.}
+{Base vectorial administrada aparte; plataforma de agentes de un proveedor de nube (ata
+modelos al proveedor y deja los inventarios fuera de la empresa).}
+
+\decision{Observabilidad autohospedada (Langfuse) con convenciones GenAI de OpenTelemetry
+\citep{otel2025genai}.}
+{Las trazas contienen conversaciones con clientes; aun enmascaradas, conviene que no salgan
+de la infraestructura de la empresa \citep{ley1581}.}
+{Servicio SaaS de trazas.}
+
+% --------------------------------------------------------------
+\subsection{Seguridad}
+\begin{figure}[!htbp]
+  \centering
+  \input{figures/f18-seguridad}
+  \caption{Seis capas que atraviesa cada petición y el riesgo del OWASP Top 10 para LLM
+  \citep{owasp2025llm} que detiene cada una.}
+  \label{fig:seguridad}
+\end{figure}
+
+\decision{Los controles son capas de la plataforma que todo agente hereda; ningún creador las
+puede quitar.}
+{Si cada agente implementa su propia seguridad, la seguridad depende de quién lo construyó.
+La inyección indirecta, por ejemplo, llega dentro de documentos y respuestas de herramientas
+\citep{greshake2023indirect} y solo se contiene tratando todo lo recuperado como dato.}
+{Filtros por expresiones regulares por agente: los usé y fallaron en ambos sentidos.}
+
+% --------------------------------------------------------------
+\subsection{Clasificación de datos}
+\begin{figure}[!htbp]
+  \centering
+  \input{figures/f19-datos}
+  \caption{Cuatro niveles de clasificación. El manifiesto declara el nivel del agente y el
+  gateway restringe los modelos y el contenido de las trazas en consecuencia.}
+  \label{fig:datos}
+\end{figure}
+
+\decision{La clasificación del dato se decide antes que el modelo.}
+{Es lo único que no se negocia por calidad o costo: restringe el conjunto de modelos elegibles
+y lo que se guarda en trazas.}
+{Dejar que cada área escoja proveedor según preferencia.}
+
+% --------------------------------------------------------------
+\subsection{Inventarios}
+Los inventarios de agentes, modelos y orquestación no son hojas de cálculo que alguien mantiene: son vistas del
+plano de control que se llenan solas, porque sin registro no hay camino a producción
+(\cref{tab:inventarios}).
+
+\begin{table}[!htbp]
+\centering\small
+\caption{Inventarios y la pregunta que responde cada uno.}
+\label{tab:inventarios}
+\renewcommand{\arraystretch}{1.1}
+\begin{tabularx}{\textwidth}{@{}L{2.2cm}YL{3.9cm}@{}}
+\toprule
+\textbf{Inventario} & \textbf{Qué registra} & \textbf{Pregunta}\\
+\midrule
+Agentes & dueño, área, versión, alias, herramientas, colecciones, clasificación, autonomía, estado, costo & ¿Cuántos hay y qué tocan?\\
+Modelos & alias, modelo y versión, proveedor, capacidades verificadas, retención, precio & ¿Con qué corren?\\
+Orquestación & herramientas (lectura o escritura, aprobación), colecciones (dueño, vigencia), flujos & ¿Qué puede hacer cada uno?\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+% --------------------------------------------------------------
+\subsection{Modelos}
+\label{sec:modelos}
+Escojo el modelo por dato y por tarea, en ese orden (\cref{fig:modelos}). Y el día que sale
+un modelo mejor no se cambia en ningún agente: se cambia detrás de un alias, después de
+pasar por la \cref{fig:cambiomodelo}.
+\begin{figure}[!htbp]
+  \centering
+  \input{figures/f05-modelos}
+  \caption{Cómo se asigna un tier: primero el dato, después la tarea.}
+  \label{fig:modelos}
+\end{figure}
+
+\decision{Tres alias (\texttt{rapido}, \texttt{estandar}, \texttt{razonamiento}) en lugar de
+nombres de modelo; tier fijo por agente al inicio.}
+{Las tareas estrechas no necesitan el modelo más caro \citep{chen2023frugalgpt,ong2025routellm}.
+El enrutamiento dinámico ahorra más, pero agrega una pieza que evaluar: lo dejo para la
+fase 3.}
+{Un único modelo para todo (caro) o enrutamiento dinámico desde el día uno (complejo).}
+
+\decision{Modelos cerrados por API con retención cero por defecto; sin GPU propias.}
+{Hoy dan la mejor capacidad por esfuerzo operativo. Lo local solo se justifica si el dato no
+puede salir o si el volumen hace más barato operar GPU, y ninguna condición se cumple en la empresa
+al inicio. Los modelos abiertos entran al catálogo cuando ganan en costo para un tier.}
+{Desplegar modelos abiertos propios desde el inicio.}
+
+\begin{figure}[!htbp]
+  \centering
+  \input{figures/f06-cambio-modelo}
+  \caption{Qué pasa el día que sale un modelo mejor: cada etapa tiene criterio de salida y
+  reversión inmediata.}
+  \label{fig:cambiomodelo}
+\end{figure}
+
+\decision{El catálogo registra capacidades \emph{verificadas} (herramientas, JSON válido,
+contexto efectivo, español) y fija versiones concretas.}
+{Un nombre de modelo no garantiza capacidades: lo viví cuando un cambio de modelo rompió la salida
+estructurada de una función que nadie volvió a probar. Además, un mismo modelo comercial cambia de comportamiento entre versiones
+\citep{chen2024drift}.}
+{Confiar en lo que anuncia el proveedor y usar alias ``latest''.}
+
+% --------------------------------------------------------------
+\subsection{Conocimiento, RAG y fine-tuning}
+\label{sec:conocimiento}
+RAG \citep{lewis2020rag} sirve cuando el conocimiento es extenso, cambia y hay que citarlo.
+Pero el error más común que veo es usarlo para todo. Antes de llegar a RAG descarto cuatro
+casos (\cref{fig:conocimiento}): datos de un cliente, cálculos, reglas que siempre aplican y
+conocimiento pequeño y estable. Para los documentos que sí van a RAG, la ingesta y la consulta
+siguen la \cref{fig:ingesta}.
+\begin{figure}[!htbp]
+  \centering
+  \input{figures/f07-conocimiento}
+  \caption{Dónde vive cada tipo de conocimiento: se recorre de izquierda a derecha y se
+  detiene en el primer ``sí''.}
+  \label{fig:conocimiento}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \input{figures/f20-ingesta}
+  \caption{Pipeline de conocimiento para tarifas, procedimientos y preguntas frecuentes.}
+  \label{fig:ingesta}
+\end{figure}
+
+\decision{Cifras tarifarias en tablas consultables por herramienta; explicaciones y
+procedimientos en RAG con vigencia obligatoria; troceo distinto por tipo de documento.}
+{Una tarifa vencida no es ``menos relevante'': es incorrecta, así que se filtra antes de
+buscar. La búsqueda híbrida con fusión RRF \citep{cormack2009rrf} encuentra tanto códigos
+exactos como preguntas conceptuales, y pocos fragmentos precisos rinden más que muchos
+\citep{liu2024lost}.}
+{RAG para todo, incluidos saldos y tarifas.}
+
+\begin{figure}[!htbp]
+  \centering
+  \input{figures/f08-volante}
+  \caption{El volante de datos: las correcciones humanas mejoran primero las suites y solo
+  con señal clara alimentan un fine-tuning.}
+  \label{fig:volante}
+\end{figure}
+
+\decision{No hacer fine-tuning en las fases 0 a 2.}
+{No hay datos validados; el conocimiento del negocio cambia cada mes y el fine-tuning inyecta
+conocimiento peor que la recuperación \citep{ovadia2024ftrag,gekhman2024newknowledge}; y ata
+la plataforma a un modelo base (choca con P3). Tendría lugar en una tarea estrecha y de alto
+volumen, como resumir llamadas de ventas, destilando a un modelo pequeño
+\citep{hu2022lora,hsieh2023distilling} cuando haya techo de calidad, costo relevante y miles
+de pares validados.}
+{Ajustar un modelo propio desde el inicio.}
+
+% --------------------------------------------------------------
+\subsection{Orquestación}
+\label{sec:orquestacion}
+\begin{figure}[!htbp]
+  \centering
+  \input{figures/f09-orquestacion}
+  \caption{Tres patrones en orden de preferencia.}
+  \label{fig:orquestacion}
+\end{figure}
+
+\decision{Agente único por defecto; dividir solo por permisos, tiers o evaluación distintos.
+En procesos regulados el flujo lo decide el código; los traspasos son objetos tipados, nunca
+el historial completo.}
+{En más de 1.600 trazas de siete marcos multiagente, las fallas vinieron sobre todo de
+especificación, desalineación entre agentes y verificación, no del modelo
+\citep{cemri2025mast}. El patrón razonar y actuar con herramientas \citep{yao2023react} cubre
+casi todos los casos de la empresa.}
+{Arquitectura multiagente desde el inicio con un supervisor LLM decidiendo todo.}

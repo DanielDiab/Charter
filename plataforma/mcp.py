@@ -1,8 +1,8 @@
 """Conexiones a los servidores MCP.
 
-Uso el cliente MCP directo y no `langchain-mcp-adapters` (que usé en el curso)
-por una razón: el runtime necesita controlar cada llamada (ocultar parámetros
-al modelo, inyectarlos desde la sesión, retener escrituras hasta que el
+Uso el cliente MCP directo y no `langchain-mcp-adapters` (que usé en un
+proyecto anterior) por una razón: el runtime necesita controlar cada llamada
+(ocultar parámetros al modelo, inyectarlos desde la sesión, retener escrituras hasta que el
 usuario confirme, envolver el resultado como dato no confiable). Con el
 adaptador, la herramienta ya llega empaquetada y esas reglas quedarían
 repartidas en envoltorios. Aquí el runtime ve el esquema crudo y decide.
@@ -48,7 +48,7 @@ class Conexiones:
             command=sys.executable,
             args=["-m", modulo],
             # El SDK de MCP arranca el subproceso con un entorno casi vacío
-            # (solo HOME y PATH). En el curso eso dejó a un servidor sin sus
+            # (solo HOME y PATH). En un proyecto anterior eso dejó a un servidor sin sus
             # variables dentro del contenedor; aquí se pasa el entorno completo.
             env={**os.environ, "PYTHONWARNINGS": "ignore"},
             cwd=str(RAIZ),

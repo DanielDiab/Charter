@@ -1,0 +1,49 @@
+\section{Definición de agente}
+\label{sec:agente}
+\begin{respuesta}
+Un \textbf{manifiesto declarativo y versionado} que la plataforma sabe ejecutar: para qué
+existe, de quién es, qué capacidades pide a los catálogos, qué datos ve, cuánta autonomía
+tiene, cómo se prueba y cuánto puede gastar. No contiene código ni nombres de modelos. Lo que
+no está en el manifiesto, el agente no lo puede hacer.
+\end{respuesta}
+
+\begin{figure}[!htbp]
+  \centering
+  \input{figures/f21-manifiesto}
+  \caption{Anatomía del manifiesto. Cada bloque alimenta un componente de la plataforma; el
+  manifiesto completo está en el \cref{anx:manifiesto}.}
+  \label{fig:manifiesto}
+\end{figure}
+
+\decision{El agente es un manifiesto, no código.}
+{La plataforma puede razonar sobre un agente sin ejecutarlo (qué datos podría tocar, qué
+acciones podría disparar) y el inventario se lee directamente del registro. Cumple para los
+agentes el papel de las \emph{model cards} \citep{mitchell2019modelcards}, pero es ejecutable.}
+{Agentes como código libre (reproduce las islas) o prompts guardados en una herramienta.}
+
+\begin{figure}[!htbp]
+  \centering
+  \input{figures/f22-autonomia}
+  \caption{Niveles de autonomía según el papel del usuario \citep{feng2025autonomy}, con un
+  ejemplo del negocio en cada uno.}
+  \label{fig:autonomia}
+\end{figure}
+
+\decision{La autonomía se declara por agente y se limita a L4 en las fases 1 y 2.}
+{La autonomía es una decisión de diseño, no una consecuencia de la capacidad del modelo
+\citep{feng2025autonomy}. Toda acción con efecto externo sobre un cliente pasa por un humano
+hasta que haya historia de evaluación.}
+{Permitir agentes totalmente autónomos desde el inicio.}
+
+\begin{figure}[!htbp]
+  \centering
+  \input{figures/f10-ciclo-vida}
+  \caption{Ciclo de vida. En ámbar, las transiciones que dispara la plataforma.}
+  \label{fig:ciclo}
+\end{figure}
+
+\decision{Re-certificación automática y caducidad.}
+{Un agente publicado vuelve a evaluación cuando cambia algo de lo que depende (modelo,
+herramienta, colección), y se depreca si queda sin dueño o sin uso 90 días. Sin esto, toda
+plataforma de autoservicio se llena de agentes huérfanos.}
+{Publicar una vez y revisar solo ante incidentes.}

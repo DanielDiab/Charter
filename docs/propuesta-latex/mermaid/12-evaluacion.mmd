@@ -1,0 +1,7 @@
+flowchart LR
+  V[Versión candidata] --> C1[Suite propia] & C2[Suite común] & C3[Costo y latencia]
+  C1 & C2 & C3 --> G{¿Supera el umbral?}
+  G -- no --> V
+  G -- sí --> P[Publicado]
+  P --> M1[Muestreo + juez] & M2[Métricas y alertas] & M3[Retroalimentación]
+  M3 --> F[Falla detectada] -- re-certificación --> V

@@ -1,0 +1,43 @@
+\thispagestyle{empty}
+\begin{center}
+  {\sffamily\small\color{docacento} PROPUESTA TÉCNICA · PLATAFORMA DE AGENTES DE IA}\\[10pt]
+  {\sffamily\bfseries\LARGE\color{docink} Agentes como configuración gobernada}\\[6pt]
+  {\sffamily\Large\color{docink} Una capa común para crear, operar y controlar los agentes de IA de una comercializadora de energía}\\[14pt]
+  {\sffamily\normalsize Daniel Felipe Diab Gonzalez}\\[2pt]
+  {\sffamily\small\color{docgris} Octubre de 2026}
+\end{center}
+\vspace{4pt}
+
+\begin{tesis}
+\begin{itemize}[leftmargin=1.1em]
+  \item \textbf{El problema.} La empresa ya usa IA en facturación, cobranzas y ventas, pero cada área
+  la armó por su cuenta. Nadie sabe cuántos agentes hay, con qué modelo corren, qué datos de
+  clientes tocan ni cuánto cuestan.
+  \item \textbf{La propuesta.} Una plataforma común donde cada agente es un
+  \emph{manifiesto}: una ficha versionada que dice qué hace, de quién es, qué herramientas y
+  datos usa y cuánto puede gastar. Sin código y sin prompts escritos a mano.
+  \item \textbf{El control.} Un solo camino a producción con tres puntos obligatorios:
+  registro, evaluación y gateway. El camino fácil es el camino controlado.
+  \item \textbf{La experiencia.} Cualquier área arma su agente conversando con un asistente,
+  lo prueba y lo publica; sus usuarios reciben respuestas fluidas, con datos reales.
+  \item \textbf{Simple a propósito.} Un runtime (LangGraph), un gateway, una base de datos y una
+  API para todos los agentes: menos costo, menos piezas que fallen, menos legado.
+  \item \textbf{El plan.} Visibilidad total en 2 semanas, primer agente certificado
+  (facturación) en 2 meses y autoservicio para todas las áreas en 4. Desde ahí, cambiar de
+  modelo deja de ser un riesgo: cada cambio pasa por evaluación y se revierte en un paso.
+\end{itemize}
+\end{tesis}
+
+\begin{figure}[h]
+  \centering
+  \input{figures/f00-tesis}
+  \caption{La propuesta en un diagrama: el camino más fácil a producción es también el único
+  que tiene llaves, herramientas internas y datos de clientes.}
+  \label{fig:tesis}
+\end{figure}
+
+
+
+\newpage
+{\small\setlength{\parskip}{1pt}\tableofcontents}
+\vspace{6pt}

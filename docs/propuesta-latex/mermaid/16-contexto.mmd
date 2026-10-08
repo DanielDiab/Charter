@@ -1,0 +1,9 @@
+flowchart LR
+  A1[Creadores] -- crean agentes --> P[Plataforma de agentes]
+  A2[Equipo de IA] -- publica catálogos --> P
+  A3[Cumplimiento] -- aprueba --> P
+  A4[Clientes] -- conversan --> P
+  S4[SSO] -- autentica --> P
+  P -- inferencia --> S1[Proveedores LLM]
+  P -- MCP --> S2[Sistemas de negocio]
+  P -- ingesta --> S3[Documentos]

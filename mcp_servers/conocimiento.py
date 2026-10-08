@@ -16,7 +16,7 @@ mcp = FastMCP("conocimiento", log_level="WARNING")
 
 @mcp.tool()
 async def buscar_conocimiento(consulta: str, colecciones: list[str], traza: dict | None = None) -> dict:
-    """Busca en la documentación vigente de Bia (tarifas, procedimientos,
+    """Busca en la documentación vigente de la empresa (tarifas, procedimientos,
     preguntas frecuentes). Devuelve hasta 5 fragmentos, cada uno con su cita."""
     fragmentos = await conocimiento.buscar(consulta, colecciones, gateway=gateway(), ctx=traza or {})
     if not fragmentos:

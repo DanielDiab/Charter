@@ -1,0 +1,14 @@
+flowchart LR
+  subgraph VPC["Nube de la empresa · red privada"]
+    UI[Consola + constructor] --> API[API de agentes] --> RT[Runtime LangGraph]
+    RT --> GW[Gateway LiteLLM]
+    RT --> MCP[Servidores MCP]
+    ING[Ingesta] --> PG[(PostgreSQL + pgvector)]
+    RT --> PG
+    EV[Evaluación] --> API
+    SEC[Gestor de secretos] --> GW
+    GW --> LF[(Langfuse)]
+  end
+  GW == única salida ==> PROV[Proveedores LLM]
+  MCP --> SIS[Sistemas de negocio]
+  SSO[SSO] --> API

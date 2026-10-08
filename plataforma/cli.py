@@ -1,18 +1,18 @@
-"""CLI `bia`: la consola del prototipo.
+"""CLI `charter`: la consola del prototipo.
 
 En la propuesta la consola es una aplicación web (inventarios, constructor,
 aprobaciones). Para el prototipo es este CLI: cubre el mismo recorrido sin
 agregar un frontend que mantener. Los comandos siguen el camino pavimentado:
 
-    bia iniciar                       registra los manifiestos e indexa el conocimiento
-    bia inventario                    los tres inventarios
-    bia arquitecto                    el agente que guía la creación de agentes
-    bia chat sac-asistente-facturacion --sandbox     probar un borrador
-    bia evaluar sac-asistente-facturacion            la compuerta
-    bia aprobar sac-asistente-facturacion --rol dueno --quien lider.sac@bia.app
-    bia publicar sac-asistente-facturacion           solo si pasó todo lo anterior
-    bia servir                        la API compatible con OpenAI
-    bia costos | trazas | metricas    observabilidad
+    charter iniciar                       registra los manifiestos e indexa el conocimiento
+    charter inventario                    los tres inventarios
+    charter arquitecto                    el agente que guía la creación de agentes
+    charter chat sac-asistente-facturacion --sandbox     probar un borrador
+    charter evaluar sac-asistente-facturacion            la compuerta
+    charter aprobar sac-asistente-facturacion --rol dueno --quien lider.sac@energia.example
+    charter publicar sac-asistente-facturacion           solo si pasó todo lo anterior
+    charter servir                        la API compatible con OpenAI
+    charter costos | trazas | metricas    observabilidad
 """
 
 import asyncio
@@ -37,7 +37,7 @@ COLOR_ESTADO = {"borrador": "yellow", "evaluacion": "cyan", "publicado": "green"
 
 @click.group()
 def cli():
-    """Plataforma de agentes de Bia: prototipo del corte vertical."""
+    """Charter: plataforma de agentes, prototipo del corte vertical."""
     # Re-certificación automática: si alguien cambió un alias, una herramienta,
     # una colección o una plantilla, los agentes afectados vuelven a evaluación
     # antes de que este proceso sirva una sola respuesta.
@@ -167,11 +167,11 @@ def evaluar(id_agente, version, juez, casos):
         # Comandos listos para copiar: con marcadores como <rol>, la shell los
         # interpreta como redirecciones y el comando falla.
         dueno = registro.obtener(id_agente, rep["version"])[0].metadata.owner
-        quien = {"dueno": dueno, "equipo-ia": "equipo.ia@bia.app", "cumplimiento": "cumplimiento@bia.app"}
+        quien = {"dueno": dueno, "equipo-ia": "equipo.ia@energia.example", "cumplimiento": "cumplimiento@energia.example"}
         consola.print(f"Aprobaciones necesarias (riesgo {rep['riesgo']}). Para registrarlas y publicar:")
         for rol in registro.APROBACIONES[rep["riesgo"]]:
-            consola.print(f"  bia aprobar {id_agente} --rol {rol} --quien {quien[rol]}", highlight=False)
-        consola.print(f"  bia publicar {id_agente}", highlight=False)
+            consola.print(f"  charter aprobar {id_agente} --rol {rol} --quien {quien[rol]}", highlight=False)
+        consola.print(f"  charter publicar {id_agente}", highlight=False)
 
 
 @cli.command()
@@ -219,7 +219,7 @@ def reactivar(id_agente):
     """Un agente suspendido vuelve a evaluación, nunca directo a publicado."""
     m, _ = registro.obtener(id_agente, estado="suspendido")
     registro.reactivar(id_agente, m.version)
-    consola.print(f"{id_agente} v{m.version} → evaluacion. Corre `bia evaluar {id_agente}`.")
+    consola.print(f"{id_agente} v{m.version} → evaluacion. Corre `charter evaluar {id_agente}`.")
 
 
 @cli.command()
@@ -307,8 +307,8 @@ def arquitecto():
     except registro.ErrorRegistro:
         entorno = "sandbox"
         consola.print("[dim]El Arquitecto aún no está publicado: corre en sandbox. "
-                      "Para publicarlo: bia evaluar plataforma-arquitecto.[/]")
-    _conversar("plataforma-arquitecto", {"cliente_id": None, "usuario": "empleado@bia.app"}, entorno, None,
+                      "Para publicarlo: charter evaluar plataforma-arquitecto.[/]")
+    _conversar("plataforma-arquitecto", {"cliente_id": None, "usuario": "empleado@energia.example"}, entorno, None,
                bienvenida="Hola, soy el Arquitecto. Puedo explicarte cómo funciona la plataforma de agentes "
                           "o acompañarte a crear un agente nuevo sin escribir prompts. ¿Qué necesitas?")
 

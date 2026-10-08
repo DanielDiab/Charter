@@ -1,0 +1,35 @@
+\begin{tikzpicture}[x=1cm,y=1cm]
+% ---------------- Izquierda: hoy ----------------
+\node[titulo] at (3.4,4.55) {HOY: TRES ISLAS};
+\foreach \i/\area/\ag/\herr/\mod in {0/Servicio al cliente/Asistente de\\facturación/Herramienta A/Modelo X,
+                                     1/Cobranzas/Mensajes\\automáticos/Herramienta B/Modelo Y,
+                                     2/Ventas/Resúmenes de\\llamadas/Herramienta C/Modelo Z}{
+  \node[neut, minimum width=2.05cm, minimum height=0.95cm, font=\sffamily\scriptsize\bfseries] (a\i) at ({1.1+2.3*\i},3.4) {\ag};
+  \node[plain, text=docgris] at ({1.1+2.3*\i},4.15) {\area};
+  \node[risk, minimum width=2.05cm, font=\sffamily\tiny] (p\i) at ({1.1+2.3*\i},2.05) {\herr\\\mod\ · llaves propias};
+  \draw[flecha] (a\i) -- (p\i);
+}
+\node[dat, minimum width=6.6cm, minimum height=0.6cm] (dc) at (3.4,0.85) {Datos de clientes (facturas, consumo, contacto)};
+\foreach \i in {0,1,2}{ \draw[flechad, draw=riskbd] (p\i) -- node[etq, text=riskbd]{¿?} (p\i |- dc.north); }
+\node[plain, text=riskbd, font=\sffamily\scriptsize\itshape] at (3.4,0.05)
+  {¿Cuántos hay? ¿Qué modelo? ¿Qué datos? ¿Cuánto cuestan?};
+
+% ---------------- Flecha central ----------------
+\draw[-{Stealth[length=9pt,width=9pt]}, line width=2.2pt, draw=docacento] (7.15,2.3) -- (8.35,2.3);
+
+% ---------------- Derecha: propuesta ----------------
+\node[titulo] at (12.25,4.55) {PROPUESTA: UNA PLATAFORMA};
+\foreach \i/\ag in {0/Asistente de\\facturación, 1/Mensajes de\\cobranza, 2/Resúmenes de\\llamadas}{
+  \node[exec, minimum width=2.05cm, minimum height=0.95cm, font=\sffamily\scriptsize\bfseries] (b\i) at ({9.95+2.3*\i},3.4) {\ag};
+  \node[plain, text=docgris, font=\sffamily\tiny] at ({9.95+2.3*\i},4.15) {manifiesto v1.x};
+}
+\node[ctrl, minimum width=6.6cm, minimum height=0.42cm] (r1) at (12.25,2.45) {\textbf{Registro} · inventarios de agentes, modelos y orquestación};
+\node[ctrl, minimum width=6.6cm, minimum height=0.42cm, below=0.08cm of r1] (r2) {\textbf{Compuerta de evaluación} · nada se publica sin pasar};
+\node[exec, minimum width=6.6cm, minimum height=0.42cm, below=0.08cm of r2] (r3) {\textbf{Gateway} · alias de modelo, costo, enmascaramiento};
+\node[obs,  minimum width=6.6cm, minimum height=0.42cm, below=0.08cm of r3] (r4) {\textbf{Trazas y costos} por agente y por área};
+\foreach \i in {0,1,2}{ \draw[flecha] (b\i) -- (b\i |- r1.north); }
+\node[dat, minimum width=2.05cm, font=\sffamily\tiny] at (9.95,0.05) {Catálogo de\\modelos};
+\node[dat, minimum width=2.05cm, font=\sffamily\tiny] at (12.25,0.05) {Herramientas\\MCP};
+\node[dat, minimum width=2.05cm, font=\sffamily\tiny] at (14.55,0.05) {Conocimiento\\(RAG)};
+\draw[flecha] (r4.south) -- (12.25,0.38);
+\end{tikzpicture}

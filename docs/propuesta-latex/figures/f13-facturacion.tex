@@ -1,0 +1,23 @@
+\begin{tikzpicture}[x=1cm,y=1cm]
+\node[neut, minimum height=0.75cm] (u) at (0,0) {\textbf{Cliente}\\autenticado};
+\node[ctrl, text width=2.0cm, minimum height=0.95cm] (id) at (2.65,0) {\textbf{Identidad}\\\texttt{cliente\_id} de la sesión};
+\node[risk, text width=2.0cm, minimum height=0.95cm] (gi) at (5.3,0) {\textbf{Guard de entrada}\\inyección, alcance, longitud};
+\node[exec, text width=2.2cm, minimum height=1.2cm] (ag) at (8.3,0) {\textbf{Agente}\\tier \texttt{estandar}\\plantilla asistente-con-datos};
+\node[risk, text width=2.2cm, minimum height=0.95cm] (go) at (11.4,0) {\textbf{Guard de salida}\\cifras verificadas, PII ajena, promesas};
+\node[neut, minimum height=0.75cm] (r) at (14.3,0) {\textbf{Respuesta}\\citada};
+\draw[flecha] (u) -- (id); \draw[flecha] (id) -- (gi); \draw[flecha] (gi) -- (ag); \draw[flecha] (ag) -- (go); \draw[flecha] (go) -- (r);
+% herramientas
+\node[dat, text width=2.3cm, font=\sffamily\tiny] (t1) at (4.75,-2.3) {\textbf{consultar\_factura}\\lectura};
+\node[dat, text width=2.3cm, font=\sffamily\tiny] (t2) at (7.3,-2.3) {\textbf{consultar\_consumo}\\medidor, lectura};
+\node[dat, text width=2.3cm, font=\sffamily\tiny] (t3) at (9.85,-2.3) {\textbf{calcular\_desglose}\\determinista};
+\node[exec, text width=2.3cm, font=\sffamily\tiny] (t4) at (12.5,-2.3) {\textbf{buscar\_conocimiento}\\tarifas, procedimientos, FAQ};
+\foreach \t in {t1,t2,t3,t4}{\draw[flecha, {Stealth[length=4pt]}-{Stealth[length=4pt]}] (ag.south) -- (\t.north);}
+\node[obs, text width=2.0cm, font=\sffamily\tiny] (t5) at (1.9,-2.3) {\textbf{crear\_caso}\\escritura: requiere confirmación};
+\draw[flecha] (ag.south west) to[out=-150, in=30] (t5.north east);
+\node[neut, text width=2.0cm] (h) at (1.9,-3.9) {\textbf{Asesor humano}\\recibe resumen};
+\draw[flecha] (t5) -- node[etq, right]{escalar} (h);
+\node[plain, text=docgris, font=\sffamily\tiny\itshape] at (8.6,-3.3) {todas las herramientas reciben el identificador del cliente desde el runtime, nunca desde el modelo};
+\begin{scope}[on background layer]
+\node[grupo, draw=riskbd!60, fit=(id)(gi)(go), inner sep=4pt, label={[font=\sffamily\tiny, text=riskbd]above:capas heredadas de la plataforma}] {};
+\end{scope}
+\end{tikzpicture}

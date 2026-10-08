@@ -1,6 +1,6 @@
 """Genera los datos sintéticos que sirven los servidores MCP del prototipo.
 
-Ningún dato de aquí es de un cliente real de Bia. Los genero con un script, y
+Ningún dato de aquí es de un cliente real. Los genero con un script, y
 no a mano, por una razón concreta: el guard de salida verifica que cada cifra
 de una respuesta aparezca en el resultado de alguna herramienta. Si las
 facturas no cuadraran con el consumo y la tarifa, la compuerta de evaluación
@@ -146,7 +146,7 @@ def main() -> None:
         "tok-espiga": {"cliente_id": "CLI-001", "usuario": "compras@laespiga.example"},
         "tok-andes": {"cliente_id": "CLI-002", "usuario": "gerencia@tallerandes.example"},
         "tok-vetnorte": {"cliente_id": "CLI-003", "usuario": "admin@vetnorte.example"},
-        "tok-empleado": {"cliente_id": None, "usuario": "asesor.sac@bia.app"},
+        "tok-empleado": {"cliente_id": None, "usuario": "asesor.sac@energia.example"},
     }
 
     for nombre, contenido in [

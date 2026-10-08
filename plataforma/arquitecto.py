@@ -125,7 +125,7 @@ class Arquitecto:
         herramientas = {r: h["para_que"] for r, h in catalogo.herramientas()["herramientas"].items()
                         if not r.startswith("plataforma/") and r != "conocimiento/buscar_conocimiento"}
         datos = await self._extraer(ctx, (
-            "Un empleado de Bia (empresa de energía) describe un agente que quiere crear. Extrae:\n"
+            "Un empleado de una comercializadora de energía describe un agente que quiere crear. Extrae:\n"
             '- "proposito": una o dos frases en español sobre para qué existe el agente, sin inventar nada.\n'
             f'- "arquetipo": uno de {json.dumps({k: v["que_hace"] for k, v in arqs.items()}, ensure_ascii=False)}\n'
             '- "tarea": "estrecha" si es clasificar, extraer o resumir; "razonamiento" si planifica o analiza '
@@ -147,7 +147,7 @@ class Arquitecto:
         e.paso = "datos"
         return (f"Entendí que el agente va a: {e.proposito}\n\n"
                 f"Por lo que describes es un agente de tipo **{e.arquetipo}**: {a['que_hace']} "
-                f"(en Bia, por ejemplo: {a['ejemplo_bia']}).\n\n{PREGUNTAS['datos']}")
+                f"(en esta empresa, por ejemplo: {a['ejemplo_negocio']}).\n\n{PREGUNTAS['datos']}")
 
     async def _paso_datos(self, e: Entrevista, texto: str, ctx: dict) -> str:
         datos = await self._extraer(ctx, (
@@ -205,14 +205,14 @@ class Arquitecto:
 
     async def _paso_nombre(self, e: Entrevista, texto: str, ctx: dict, sesion: dict) -> str:
         datos = await self._extraer(ctx, (
-            'Extrae "area" (el área de Bia, una o dos palabras en minúscula) y "nombre" (dos a cuatro palabras '
+            'Extrae "area" (el área de la empresa, una o dos palabras en minúscula) y "nombre" (dos a cuatro palabras '
             "que describan el agente) del texto."
         ), texto)
         e.area = slug(datos.get("area") or "general")
         nombre = slug(datos.get("nombre") or "agente")
         e.id = nombre if nombre.startswith(e.area) else f"{e.area}-{nombre}"
         propuesta = constructor.proponer_manifiesto(
-            e.id, e.area, sesion.get("usuario") or "sin-dueno@bia.app", e.arquetipo, e.proposito, e.datos, e.tarea,
+            e.id, e.area, sesion.get("usuario") or "sin-dueno@energia.example", e.arquetipo, e.proposito, e.datos, e.tarea,
             e.siempre, e.nunca, e.herramientas, e.colecciones)
         if "error" in propuesta:
             return f"La plataforma no pudo armarlo: {propuesta['error']}"
@@ -247,9 +247,9 @@ class Arquitecto:
             return f"No se pudo guardar: {r['error']}"
         e.guardado = True
         return (f"Listo: **{e.id}** quedó registrado como borrador ({r['manifiesto']}, suite {r['suite']}).\n\n"
-                f"Siguientes pasos:\n1. Pruébalo: `bia chat {e.id} --sandbox`\n2. Pasa la compuerta: "
-                f"`bia evaluar {e.id}`\n3. Aprobaciones y publicación: `bia aprobar {e.id} --rol dueno --quien <correo>` "
-                f"y `bia publicar {e.id}`")
+                f"Siguientes pasos:\n1. Pruébalo: `charter chat {e.id} --sandbox`\n2. Pasa la compuerta: "
+                f"`charter evaluar {e.id}`\n3. Aprobaciones y publicación: `charter aprobar {e.id} --rol dueno --quien <correo>` "
+                f"y `charter publicar {e.id}`")
 
     # ── Enrutador ────────────────────────────────────────────────────────
 

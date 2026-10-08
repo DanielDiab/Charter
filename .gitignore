@@ -4,8 +4,27 @@ __pycache__/
 *.egg-info/
 .pytest_cache/
 .env
-# Estado local: registro, trazas, índice, casos, reportes. Se regenera con `bia iniciar`.
+# Estado local: registro, trazas, índice, casos, reportes. Se regenera con `charter iniciar`.
 .estado/
 # Borradores creados con el Arquitecto durante la demo
 manifiestos/borradores/*.yaml
 .DS_Store
+# Artefactos de build y de herramientas
+build/
+dist/
+.coverage
+htmlcov/
+.ruff_cache/
+.mypy_cache/
+# Los modelos de Ollama viven en ~/.ollama, fuera del repo: no hace falta ignorarlos aquí.
+# Auxiliares de LaTeX (la fuente vive en docs/propuesta-latex/; el PDF se versiona en docs/)
+docs/propuesta-latex/*.aux
+docs/propuesta-latex/*.bbl
+docs/propuesta-latex/*.blg
+docs/propuesta-latex/*.fdb_latexmk
+docs/propuesta-latex/*.fls
+docs/propuesta-latex/*.log
+docs/propuesta-latex/*.out
+docs/propuesta-latex/*.toc
+docs/propuesta-latex/*.synctex.gz
+docs/propuesta-latex/main.pdf

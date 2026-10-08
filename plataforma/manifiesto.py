@@ -89,7 +89,7 @@ class Spec(_Base):
 
 
 class Manifiesto(_Base):
-    apiVersion: Literal["bia.ai/v1"]
+    apiVersion: Literal["charter/v1"]
     kind: Literal["Agent"]
     metadata: Metadata
     spec: Spec
@@ -178,7 +178,7 @@ def validar(m: Manifiesto) -> list[str]:
             errores.append(str(e.args[0]))
             continue
         if h.get("requiere_confirmacion") and not t.requires_confirmation:
-            errores.append(f"'{t.mcp}' escribe en un sistema de Bia: debe declarar requires_confirmation: true.")
+            errores.append(f"'{t.mcp}' escribe en un sistema de negocio: debe declarar requires_confirmation: true.")
         if catalogo.nivel(h["clasificacion"]) > catalogo.nivel(clasif):
             errores.append(
                 f"'{t.mcp}' devuelve datos '{h['clasificacion']}' pero el agente se declaró '{clasif}'. "

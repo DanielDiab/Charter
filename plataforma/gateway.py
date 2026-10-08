@@ -48,7 +48,7 @@ def _fabrica_ollama(nombre_alias: str, a: dict):
         num_predict=p.get("max_tokens", 600),
         num_ctx=p.get("num_ctx", 8192),
         # Mantiene el modelo cargado entre turnos: ahorra ~1 s de carga cuando
-        # Ollama lo descarga por inactividad. Aprendido en el curso con GPU de 4 GB.
+        # Ollama lo descarga por inactividad. Medido en una GPU de 4 GB.
         keep_alive="30m",
         **extra,
     )

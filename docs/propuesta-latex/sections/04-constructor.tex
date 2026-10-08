@@ -1,0 +1,48 @@
+\section{Creación de agentes sin escribir prompts}
+\label{sec:constructor}
+\begin{respuesta}
+No se le pide un prompt. Se le pide lo que sí sabe: la tarea, qué está bien y qué está mal, y
+ejemplos reales. El \emph{Arquitecto}, un agente de la propia plataforma, lo entrevista; la
+plataforma compila las instrucciones desde plantillas curadas, hereda los controles y
+convierte los ejemplos en la primera suite de pruebas.
+\end{respuesta}
+
+\begin{figure}[!htbp]
+  \centering
+  \input{figures/f11-constructor}
+  \caption{Recorrido del constructor. El usuario aporta el negocio; la plataforma, la técnica.}
+  \label{fig:constructor}
+\end{figure}
+
+\decision{Instrucciones compiladas desde una especificación, no escritas a mano.}
+{Cambios de formato que parecen irrelevantes mueven el desempeño de los modelos
+\citep{sclar2024sensitivity}: escribir prompts es una habilidad técnica frágil. Declarar el
+\emph{qué} y compilar el \emph{cómo} es la idea de DSPy \citep{khattab2024dspy}; aquí la
+compilación es conservadora (plantillas revisadas) y la optimización automática queda para
+después. Lo viví: en un sistema que construí, los prompts escritos a mano terminaron ocupando casi toda la configuración y nadie podía revisarlos.}
+{Un editor de prompts con buenas prácticas y ejemplos.}
+
+\decision{Cuatro arquetipos y ejemplos que se vuelven pruebas.}
+{Pocos arquetipos bien resueltos (\cref{tab:arquetipos}) cubren la mayoría de las necesidades
+y cada uno trae plantilla, patrón y suite base. Los ejemplos del usuario, más casos adversos
+que propone el Arquitecto, dan una suite de 15 a 30 casos que su dueño entiende. El sandbox
+existe porque los criterios de calidad se descubren al ver respuestas reales
+\citep{shankar2024validators}.}
+{Un lienzo libre donde todo es posible.}
+
+\begin{table}[!htbp]
+\centering\small
+\caption{Arquetipos iniciales.}
+\label{tab:arquetipos}
+\renewcommand{\arraystretch}{1.1}
+\begin{tabularx}{\textwidth}{@{}L{3.3cm}YL{3.4cm}L{1.6cm}@{}}
+\toprule
+\textbf{Arquetipo} & \textbf{Qué hace} & \textbf{Ejemplo en el negocio} & \textbf{Riesgo}\\
+\midrule
+Pregunta sobre documentos & Responde citando colecciones & Procedimientos internos & Bajo\\
+Asistente con datos & Conversa con herramientas de lectura & Facturación & Medio\\
+Redactor & Produce textos; un humano revisa & Cobranza & Medio--alto\\
+Extractor o clasificador & Texto libre a datos estructurados & Llamadas de ventas & Bajo\\
+\bottomrule
+\end{tabularx}
+\end{table}

@@ -1,7 +1,7 @@
 # Guía de la demo
 
 Recorrido de unos 20 minutos por todo el prototipo, en el orden en que una
-persona de Bia viviría la plataforma. Todo es local: Ollama y este repo, sin
+persona de la empresa viviría la plataforma. Todo es local: Ollama y este repo, sin
 llaves de API.
 
 ## 0. Preparar (una vez)
@@ -14,7 +14,7 @@ pytest                                         # 85 pruebas offline, ~15 s, no n
 ```
 
 En Windows (PowerShell) la preparación cambia así; el resto de los comandos
-`bia` de esta guía son iguales:
+`charter` de esta guía son iguales:
 
 ```powershell
 py -m venv .venv; .venv\Scripts\Activate.ps1; $env:PYTHONUTF8 = "1"; pip install -e .
@@ -39,26 +39,26 @@ Remove-Item -Recurse -Force .estado -ErrorAction SilentlyContinue; Get-ChildItem
 ## 1. Visibilidad: la fase 0 del documento
 
 ```bash
-bia iniciar
-bia inventario
+charter iniciar
+charter inventario
 ```
 
 `iniciar` registra los tres manifiestos como borradores e indexa el
-conocimiento con embeddings. El inventario responde las preguntas del caso
-B.1: cuántos agentes hay, con qué modelo corren, qué datos tocan y cuánto
+conocimiento con embeddings. El inventario responde las preguntas de la fase 0:
+cuántos agentes hay, con qué modelo corren, qué datos tocan y cuánto
 cuestan. En las colecciones aparecen **2 fragmentos vencidos**: es la versión
 anterior de un documento de tarifas, que el filtro de vigencia saca antes de
 buscar.
 
 > Conviene una terminal ancha: las tablas son grandes. En macOS/Linux se puede
-> forzar con `COLUMNS=160 bia inventario`; en Windows basta con maximizar la ventana.
+> forzar con `COLUMNS=160 charter inventario`; en Windows basta con maximizar la ventana.
 
 ## 2. La compuerta: nada se publica sin pasar
 
 ```bash
-bia evaluar sac-asistente-facturacion      # ~3 min · riesgo medio, umbral 90 %
-bia evaluar sac-procedimientos-internos    # ~1 min · riesgo bajo, umbral 85 %
-bia evaluar plataforma-arquitecto          # ~2 min
+charter evaluar sac-asistente-facturacion      # ~3 min · riesgo medio, umbral 90 %
+charter evaluar sac-procedimientos-internos    # ~1 min · riesgo bajo, umbral 85 %
+charter evaluar plataforma-arquitecto          # ~2 min
 ```
 
 Cada caso se ve con ✓ o ✗ y la razón. Al final aparecen las tres capas:
@@ -70,28 +70,28 @@ Pasar la compuerta no basta para publicar. Si se intenta antes de las
 aprobaciones, el registro lo impide:
 
 ```bash
-bia publicar sac-asistente-facturacion     # rechazado: faltan aprobaciones de dueño y equipo de IA
+charter publicar sac-asistente-facturacion     # rechazado: faltan aprobaciones de dueño y equipo de IA
 ```
 
 ## 3. Aprobaciones según el riesgo y publicación
 
 ```bash
-bia aprobar sac-asistente-facturacion --rol dueno --quien lider.sac@bia.app
-bia aprobar sac-asistente-facturacion --rol equipo-ia --quien equipo.ia@bia.app
-bia publicar sac-asistente-facturacion
+charter aprobar sac-asistente-facturacion --rol dueno --quien lider.sac@energia.example
+charter aprobar sac-asistente-facturacion --rol equipo-ia --quien equipo.ia@energia.example
+charter publicar sac-asistente-facturacion
 
-bia aprobar sac-procedimientos-internos --rol dueno --quien lider.sac@bia.app
-bia publicar sac-procedimientos-internos
+charter aprobar sac-procedimientos-internos --rol dueno --quien lider.sac@energia.example
+charter publicar sac-procedimientos-internos
 
-bia aprobar plataforma-arquitecto --rol dueno --quien equipo.ia@bia.app
-bia publicar plataforma-arquitecto
-bia eventos                                # la historia completa del ciclo de vida
+charter aprobar plataforma-arquitecto --rol dueno --quien equipo.ia@energia.example
+charter publicar plataforma-arquitecto
+charter eventos                                # la historia completa del ciclo de vida
 ```
 
 ## 4. El caso aplicado: el asistente de facturación
 
 ```bash
-bia chat sac-asistente-facturacion --cliente CLI-001
+charter chat sac-asistente-facturacion --cliente CLI-001
 ```
 
 Preguntas para mostrar cada mecanismo (Panadería La Espiga, cuya factura de
@@ -110,15 +110,15 @@ septiembre subió 33 %):
 Después:
 
 ```bash
-bia trazas -n 30        # cada paso con modelo, tokens, costo y latencia; la PII queda enmascarada
-bia costos              # costo por agente, área y entorno
-bia metricas sac-asistente-facturacion
+charter trazas -n 30        # cada paso con modelo, tokens, costo y latencia; la PII queda enmascarada
+charter costos              # costo por agente, área y entorno
+charter metricas sac-asistente-facturacion
 ```
 
 ## 5. El PLUS: el Arquitecto
 
 ```bash
-bia arquitecto
+charter arquitecto
 ```
 
 **Preguntas sobre la plataforma** (responde desde la documentación, con cita,
@@ -146,8 +146,8 @@ se puede hacer una pregunta (*¿qué significa el tier rápido?*): la responde y
 retoma. Después:
 
 ```bash
-bia chat ventas-resumen-de-llamadas --sandbox
-bia evaluar ventas-resumen-de-llamadas     # pasa, con la advertencia de que su suite es corta
+charter chat ventas-resumen-de-llamadas --sandbox
+charter evaluar ventas-resumen-de-llamadas     # pasa, con la advertencia de que su suite es corta
 ```
 
 ## 6. La API: los canales se conectan como a cualquier modelo
@@ -157,7 +157,7 @@ comando) y escapa las comillas del JSON, o prueba desde `http://localhost:8000/d
 la documentación interactiva que genera FastAPI.
 
 ```bash
-bia servir                                  # en otra terminal
+charter servir                                  # en otra terminal
 curl -s localhost:8000/v1/models
 curl -s localhost:8000/v1/chat/completions \
   -H "Authorization: Bearer tok-espiga" -H "Content-Type: application/json" \
@@ -176,7 +176,7 @@ Edita `catalogos/modelos.yaml` y cambia el modelo del alias `rapido` (por
 ejemplo a `qwen3:8b`). Después:
 
 ```bash
-bia inventario agentes
+charter inventario agentes
 ```
 
 Antes de mostrar nada, la plataforma detecta que cambió la huella del alias

@@ -1,0 +1,22 @@
+\begin{tikzpicture}[x=1cm,y=1cm, act/.style={neut, rounded corners=8pt, text width=2.6cm, minimum height=0.95cm}, ext/.style={dat, text width=2.6cm, minimum height=0.95cm}]
+\node[ctrl, fill=docink, text=white, draw=docink, text width=4.6cm, minimum height=2.1cm, font=\sffamily\small] (P) at (0,0)
+  {\textbf{Plataforma de agentes}\\[2pt]\scriptsize registro · catálogos · constructor\\evaluación · runtime · gateway · trazas};
+% actores (izquierda)
+\node[act] (a1) at (-6.2,1.6)  {\textbf{Creadores}\\servicio, cobranzas, ventas};
+\node[act] (a2) at (-6.2,0)    {\textbf{Equipo de IA}\\cura catálogos y plantillas};
+\node[act] (a3) at (-6.2,-1.6) {\textbf{Cumplimiento}\\aprueba riesgo alto};
+\node[act] (a4) at (0,2.65) {\textbf{Clientes}\\usan agentes en la app};
+% sistemas (derecha)
+\node[ext] (s1) at (6.2,1.6)  {\textbf{Proveedores LLM}\\retención cero};
+\node[ext] (s2) at (6.2,0)    {\textbf{Sistemas de negocio}\\facturación, medición, CRM};
+\node[ext] (s3) at (6.2,-1.6) {\textbf{Documentos}\\tarifas, procedimientos, FAQ};
+\node[ext] (s4) at (0,-2.65)  {\textbf{SSO corporativo}\\identidad y roles};
+\draw[flecha] (a1) -- node[etq, above, sloped]{crean agentes} (P);
+\draw[flecha] (a2) -- node[etq, above]{publica catálogos} (P);
+\draw[flecha] (a3) -- node[etq, below, sloped]{aprueba} (P);
+\draw[flecha] (a4) -- node[etq, right]{conversan} (P);
+\draw[flecha] (P) -- node[etq, above, sloped]{inferencia} (s1);
+\draw[flecha] (P) -- node[etq, above]{MCP} (s2);
+\draw[flecha] (P) -- node[etq, below, sloped]{ingesta} (s3);
+\draw[flecha] (s4) -- node[etq, right]{autentica} (P);
+\end{tikzpicture}

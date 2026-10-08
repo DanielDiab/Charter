@@ -1,0 +1,25 @@
+\begin{tikzpicture}[x=1cm,y=1cm, dd/.style={dec, font=\sffamily\tiny, inner sep=0pt, minimum width=3.1cm, minimum height=1.45cm}]
+\node[neut, minimum height=0.6cm] (ini) at (-0.9,0) {Tarea\\nueva};
+\node[dd] (d1) at (1.9,0) {¿Ve datos\\restringidos?};
+\node[dd] (d2) at (5.5,0) {¿Ve datos de\\clientes (confidencial)?};
+\node[dd] (d3) at (9.1,0) {¿Tarea estrecha y\\de alto volumen?};
+\node[dd] (d4) at (12.7,0) {¿Planifica varios\\pasos o razona?};
+\draw[flecha] (ini) -- (d1);
+\draw[flecha] (d1) -- node[etq, above]{no} (d2);
+\draw[flecha] (d2) -- node[etq, above, pos=0.3]{no} (d3);
+\draw[flecha] (d3) -- node[etq, above]{no} (d4);
+\node[risk, text width=2.6cm] (o1) at (1.9,-2.25) {\textbf{No va al modelo}\\se enmascara o se resuelve con herramienta};
+\node[ctrl, text width=2.6cm] (o2) at (5.5,-2.25) {\textbf{Restricción}: solo proveedores con retención cero y acuerdo de datos};
+\node[exec, text width=2.4cm] (o3) at (9.1,-2.25) {\textbf{Tier} \texttt{rapido}\\clasificar, extraer, resumir};
+\node[exec, text width=2.75cm] (o4) at (12.55,-2.25) {\textbf{Tier} \texttt{razonamiento}\\planificación, análisis};
+\node[exec, text width=2.0cm] (o5) at (15.35,-2.25) {\textbf{Tier} \texttt{estandar}\\conversación con herramientas};
+\draw[flecha] (d1) -- node[etq, right]{sí} (o1);
+\draw[flecha] (d2) -- node[etq, right]{sí} (o2);
+\draw[flecha] (d3) -- node[etq, right]{sí} (o3);
+\draw[flecha] (d4) -- node[etq, right]{sí} (o4);
+\draw[flecha] (d4.east) -| node[etq, above, pos=0.25]{no} (o5.north);
+\coordinate (jn) at ($(d2.east)!0.5!(d3.west)$);
+\draw[dashed, line width=0.7pt, draw=neutbd] (o2.east) -| (jn);
+\fill[neutbd] (jn) circle (1.6pt);
+\node[plain, text=docgris, font=\sffamily\tiny\itshape, anchor=north] at (o2.south) {la restricción se suma; la decisión continúa};
+\end{tikzpicture}

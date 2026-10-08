@@ -1,0 +1,51 @@
+\section{Evaluación y monitoreo}
+\label{sec:eval}
+\begin{respuesta}
+Antes: una compuerta con tres capas (suite propia, suite común de seguridad, costo y
+latencia) y un umbral según el riesgo. Después: muestreo de conversaciones evaluado con los
+mismos criterios, métricas y alertas por agente, y re-certificación automática ante cualquier
+cambio. Cada falla en producción se convierte en un caso nuevo de la suite.
+\end{respuesta}
+
+\begin{figure}[!htbp]
+  \centering
+  \input{figures/f12-evaluacion}
+  \caption{Evaluación en dos tiempos: compuerta antes de publicar y monitoreo en producción.}
+  \label{fig:evaluacion}
+\end{figure}
+
+\decision{Checks deterministas donde se pueda y juez LLM calibrado donde haga falta criterio.}
+{Lo verificable (herramienta correcta, cifra igual a la del sistema, formato) no necesita
+juicio. Para el resto, el juez escala pero tiene sesgos de posición, verbosidad y familia
+\citep{zheng2023judge}: uso rúbricas binarias, un juez de otra familia y mido su
+acuerdo con etiquetas humanas antes de confiar en él.}
+{Solo revisión humana (no escala) o solo juez (arrastra sesgos).}
+
+\decision{Costo y latencia son parte de la compuerta.}
+{Medir exactitud sin costo lleva a escoger mal \citep{kapoor2024agents}; el presupuesto del
+manifiesto es un criterio de aprobación.}
+{Optimizar costo después de publicar.}
+
+\begin{table}[!htbp]
+\centering\small
+\caption{Umbrales iniciales de la compuerta por nivel de riesgo (a calibrar).}
+\label{tab:umbrales}
+\renewcommand{\arraystretch}{1.1}
+\begin{tabularx}{\textwidth}{@{}L{2.3cm}YYY@{}}
+\toprule
+& \textbf{Bajo} & \textbf{Medio} & \textbf{Alto}\\
+\midrule
+Definición & Interno, solo lectura & Datos de clientes & Habla con clientes o actúa\\
+Suite propia & $\geq$\,85\,\% & $\geq$\,90\,\% & $\geq$\,95\,\% + revisión humana\\
+Aprobación & Dueño & + equipo de IA & + datos y cumplimiento\\
+Despliegue & Directo & Canario & Sombra + canario\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+En producción se miden por agente cinco dimensiones: calidad (aprobación en la muestra,
+retroalimentación, escalamientos), seguridad (bloqueos, incidentes de datos, que suspenden
+el agente de forma automática), costo (por conversación y por área), operación (latencia
+p95, errores de herramientas) y adopción. Monitorear es necesario porque un agente puede
+degradarse sin que nadie lo toque: cambian las preguntas, los documentos o el propio modelo
+\citep{chen2024drift}.

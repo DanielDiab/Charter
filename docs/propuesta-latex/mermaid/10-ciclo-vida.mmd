@@ -1,0 +1,11 @@
+stateDiagram-v2
+  [*] --> Borrador
+  Borrador --> Evaluacion: enviar
+  Evaluacion --> Borrador: falla
+  Evaluacion --> Publicado: pasa la compuerta
+  Publicado --> Evaluacion: re-certificación
+  Publicado --> Suspendido: alerta
+  Suspendido --> Publicado: corregido
+  Suspendido --> Deprecado: no se corrige
+  Publicado --> Deprecado: reemplazo o caducidad
+  Deprecado --> Retirado

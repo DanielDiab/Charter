@@ -1,0 +1,8 @@
+flowchart LR
+  U[Cliente autenticado] --> I[Identidad: cliente_id de la sesión] --> GI[Guard de entrada] --> AG[Agente tier estandar]
+  AG <--> T1[consultar_factura]
+  AG <--> T2[consultar_consumo]
+  AG <--> T3[calcular_desglose]
+  AG <--> T4[buscar_conocimiento]
+  AG --> T5[crear_caso con confirmación] --> H[Asesor humano]
+  AG --> GO[Guard de salida] --> R[Respuesta citada]

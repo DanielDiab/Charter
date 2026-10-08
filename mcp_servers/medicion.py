@@ -1,6 +1,6 @@
 """MCP de medición: lectura del medidor inteligente.
 
-Es la ventaja que el documento le reconoce a Bia (sección 6): la serie diaria
+Es la ventaja que el documento le reconoce a la comercializadora (sección 6): la serie diaria
 del medidor explica una variación con precisión. Aquí detecto el día en que
 cambió el patrón de consumo para que el agente no tenga que inferirlo.
 """

@@ -1,17 +1,17 @@
 """Las pruebas corren sin Ollama: el gateway recibe un modelo falso con
 respuestas guionadas. Todo lo demás es real (manifiestos, catálogos, registro,
 servidores MCP, guards, trazas), así que lo que se prueba es la plataforma y no
-el modelo. La calidad del modelo la mide la compuerta (`bia evaluar`).
+el modelo. La calidad del modelo la mide la compuerta (`charter evaluar`).
 """
 
 import os
 import tempfile
 
-_ESTADO = tempfile.mkdtemp(prefix="bia-pruebas-")
-os.environ["BIA_ESTADO_DIR"] = _ESTADO
-os.environ["BIA_GUARD_ALCANCE"] = "0"
-os.environ["BIA_EMBEDDINGS"] = "0"
-os.environ["BIA_HOY"] = "2026-10-03"
+_ESTADO = tempfile.mkdtemp(prefix="charter-pruebas-")
+os.environ["CHARTER_ESTADO_DIR"] = _ESTADO
+os.environ["CHARTER_GUARD_ALCANCE"] = "0"
+os.environ["CHARTER_EMBEDDINGS"] = "0"
+os.environ["CHARTER_HOY"] = "2026-10-03"
 
 import asyncio  # noqa: E402
 

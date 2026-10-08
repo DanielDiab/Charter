@@ -1,0 +1,22 @@
+sequenceDiagram
+  participant C as Cliente
+  participant A as API + Runtime
+  participant G as Guards
+  participant W as Gateway
+  participant M as Modelo
+  participant F as MCP facturación
+  participant T as Trazas
+  C->>A: pregunta + sesión
+  A->>G: guard de entrada
+  G-->>A: ok
+  A->>W: alias estandar
+  W->>M: modelo resuelto + política
+  M-->>A: pide consultar_factura
+  A->>F: cliente_id de la sesión
+  F-->>A: datos (no confiables)
+  A->>W: segunda llamada
+  W->>M: con el resultado
+  M-->>A: respuesta completa (buffer)
+  A->>G: guard de salida
+  A-->>C: respuesta
+  A-)T: traza enmascarada

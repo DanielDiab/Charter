@@ -11,7 +11,7 @@ from plataforma.config import EVALS, MANIFIESTOS
 from plataforma.manifiesto import cargar
 from plataforma.mcp import Conexiones
 
-SESION = {"cliente_id": None, "usuario": "lider.ventas@bia.app"}
+SESION = {"cliente_id": None, "usuario": "lider.ventas@energia.example"}
 
 
 def _json(**datos) -> AIMessage:
@@ -50,12 +50,12 @@ async def test_entrevista_completa_crea_un_borrador_valido(guion):
                       "Buena respuesta: Cliente: Pedro. Interés: plan solar. Siguiente paso: cotización el viernes.",
                       SESION, conv)
         r = await a.turno("Es de ventas, llámalo resumen de llamadas", SESION, conv)
-        assert "ventas-resumen-de-llamadas" in r.respuesta and "lider.ventas@bia.app" in r.respuesta
+        assert "ventas-resumen-de-llamadas" in r.respuesta and "lider.ventas@energia.example" in r.respuesta
         r = await a.turno("sí", SESION, conv)
     assert r.herramientas == ["plataforma/guardar_borrador"]
     m, info = registro.obtener("ventas-resumen-de-llamadas")
     assert info["estado"] == "borrador"
-    assert m.metadata.owner == "lider.ventas@bia.app"          # de la sesión, no del modelo
+    assert m.metadata.owner == "lider.ventas@energia.example"          # de la sesión, no del modelo
     assert m.spec.model.alias == "rapido"
     suite = yaml.safe_load((EVALS / "ventas-resumen-de-llamadas.yaml").read_text(encoding="utf-8"))
     entradas = [c["entrada"] for c in suite["casos"]]

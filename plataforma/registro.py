@@ -161,7 +161,7 @@ def guardar_reporte(id_: str, version: str, reporte: dict) -> None:
 def aprobar(id_: str, version: str, rol: str, quien: str) -> list[str]:
     m, info = obtener(id_, version)
     if not (info["reporte"] and info["reporte"]["aprobado"]):
-        raise ErrorRegistro("No se aprueba algo que no pasó la compuerta. Corre primero `bia evaluar`.")
+        raise ErrorRegistro("No se aprueba algo que no pasó la compuerta. Corre primero `charter evaluar`.")
     if rol not in APROBACIONES[info["riesgo"]]:
         raise ErrorRegistro(f"Con riesgo {info['riesgo']} las aprobaciones son: {APROBACIONES[info['riesgo']]}.")
     aprobaciones = [a for a in info["aprobaciones"] if a["rol"] != rol] + [{"rol": rol, "quien": quien}]
@@ -173,12 +173,12 @@ def publicar(id_: str, version: str | None = None) -> str:
     m, info = obtener(id_, version)
     reporte = info["reporte"]
     if info["estado"] != "evaluacion" or not reporte or not reporte["aprobado"]:
-        raise ErrorRegistro(f"{id_} v{m.version} está '{info['estado']}' sin compuerta aprobada. Corre `bia evaluar {id_}`.")
+        raise ErrorRegistro(f"{id_} v{m.version} está '{info['estado']}' sin compuerta aprobada. Corre `charter evaluar {id_}`.")
     if reporte["huella_manifiesto"] != catalogo.huella(m.a_yaml()):
         raise ErrorRegistro("El manifiesto cambió después de evaluarlo. Vuelve a correr la compuerta.")
     faltan = [r for r in APROBACIONES[info["riesgo"]] if r not in {a["rol"] for a in info["aprobaciones"]}]
     if faltan:
-        raise ErrorRegistro(f"Riesgo {info['riesgo']}: faltan aprobaciones de {', '.join(faltan)} (`bia aprobar`).")
+        raise ErrorRegistro(f"Riesgo {info['riesgo']}: faltan aprobaciones de {', '.join(faltan)} (`charter aprobar`).")
 
     # Una sola versión publicada por agente: la anterior se depreca (deja de
     # recibir tráfico nuevo pero su traza se conserva).

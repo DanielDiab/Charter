@@ -1,0 +1,16 @@
+flowchart LR
+  subgraph HOY["Hoy: tres islas"]
+    A1[Asistente de facturación] --> P1[Herramienta A · Modelo X]
+    A2[Mensajes de cobranza] --> P2[Herramienta B · Modelo Y]
+    A3[Resúmenes de llamadas] --> P3[Herramienta C · Modelo Z]
+    P1 -.-> D[(Datos de clientes)]
+    P2 -.-> D
+    P3 -.-> D
+  end
+  subgraph PROP["Propuesta: una plataforma"]
+    B1[Facturación] --> R[Registro]
+    B2[Cobranza] --> R
+    B3[Ventas] --> R
+    R --> G[Compuerta de evaluación] --> GW[Gateway] --> T[Trazas y costos]
+  end
+  HOY ==> PROP

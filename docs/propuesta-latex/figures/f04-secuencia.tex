@@ -1,0 +1,35 @@
+\begin{tikzpicture}[x=1cm,y=1cm]
+\def\yb{-7.55}
+\node[obs, text width=15.4cm, align=left, anchor=west, minimum height=0.6cm] at (-0.95,1.05)
+  {\textbf{Proceso intervenido: consulta de factura en servicio al cliente.} Hoy un asesor revisa
+  facturación, medición y la normativa tarifaria para responder. Con la plataforma, el asistente
+  responde con los datos del cliente y escala a un asesor lo que no le corresponde.};
+\foreach \x/\n/\t/\s in {0/cli/Cliente/neut, 2.6/api/{API + Runtime}/exec, 5.1/grd/Guards/risk,
+                         7.6/gw/Gateway/exec, 10.1/llm/{Modelo (alias)}/dat, 12.6/mcp/{MCP: facturación}/dat,
+                         15.0/tr/Trazas/obs}{
+  \node[\s, minimum width=2.0cm, minimum height=0.55cm, font=\sffamily\scriptsize\bfseries] (\n) at (\x,0) {\t};
+  \draw[densely dotted, draw=neutbd!60, line width=0.6pt] (\n.south) -- (\x,\yb);
+}
+\newcommand{\msg}[5][flecha]{%
+  \draw[#1] (#2,#4) -- node[etq, above, yshift=-0.5pt]{#5} (#3,#4);}
+\msg{0}{2.6}{-0.75}{pregunta + sesión}
+\msg{2.6}{5.1}{-1.3}{entrada: inyección, alcance}
+\msg[flechad]{5.1}{2.6}{-1.8}{ok}
+\msg{2.6}{7.6}{-2.35}{alias \texttt{estandar}}
+\msg{7.6}{10.1}{-2.9}{modelo resuelto + política}
+\msg[flechad]{10.1}{7.6}{-3.45}{pide herramienta}
+\msg[flechad]{7.6}{2.6}{-3.95}{\texttt{consultar\_factura}}
+\msg{2.6}{12.6}{-4.5}{cliente\_id \emph{de la sesión}, no del texto}
+\msg[flechad]{12.6}{2.6}{-5.05}{datos marcados como no confiables}
+\msg{2.6}{10.1}{-5.6}{segunda llamada con el resultado (vía gateway)}
+\msg[flechad]{10.1}{2.6}{-6.15}{respuesta por bloques}
+\msg{2.6}{5.1}{-6.65}{salida: valida cada bloque}
+\msg[flechad]{2.6}{0}{-7.2}{respuesta}
+% trazas
+\draw[flecha, draw=obsbd, densely dashed] (7.6,-4.2) -- node[etq, above, text=obsbd, pos=0.75]{span: tokens, costo} (15.0,-4.2);
+\draw[flecha, draw=obsbd, densely dashed] (2.6,-7.0) -- node[etq, above, text=obsbd, pos=0.8]{traza enmascarada} (15.0,-7.0);
+% marcas de pasos
+\foreach \y/\k in {-0.75/1,-1.3/2,-2.35/3,-4.5/4,-5.6/5,-6.65/6,-7.2/7}{
+  \node[circle, fill=docacento, text=white, inner sep=0.8pt, font=\sffamily\tiny\bfseries] at (-0.55,\y) {\k};
+}
+\end{tikzpicture}

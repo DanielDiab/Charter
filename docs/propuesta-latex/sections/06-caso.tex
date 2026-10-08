@@ -1,0 +1,66 @@
+\section{Caso aplicado: asistente de facturación}
+\label{sec:caso}
+\begin{respuesta}
+Escogí el asistente de facturación de servicio al cliente porque concentra lo difícil en un solo
+agente: datos confidenciales, conocimiento regulado que cambia cada mes, cifras que no pueden inventarse y
+una frontera clara entre resolver y escalar. Lo contrasto con cobranzas, donde la ley
+obliga a que el flujo lo decida el código.
+\end{respuesta}
+
+Un cliente empresarial pregunta \emph{¿por qué subió mi factura?} La respuesta exige su
+consumo medido, su factura, y la explicación de los componentes del costo unitario
+(generación, transmisión, distribución, comercialización, pérdidas, restricciones). La empresa tiene
+una ventaja: los datos del medidor inteligente explican la variación con precisión.
+
+\begin{figure}[!htbp]
+  \centering
+  \input{figures/f13-facturacion}
+  \caption{Grafo del asistente de facturación construido desde su manifiesto.}
+  \label{fig:facturacion}
+\end{figure}
+
+\decision{El sujeto viene de la sesión y las cifras solo de herramientas.}
+{``Dame la factura de la empresa X'' no se rechaza con inteligencia: la arquitectura lo hace
+imposible. Y el guard de salida verifica que toda cifra de la respuesta aparezca en algún
+resultado de herramienta de esa conversación.}
+{Confiar en que las instrucciones del modelo eviten estos errores.}
+
+\begin{table}[!htbp]
+\centering\small
+\caption{Cada pregunta va al mecanismo de su tipo de conocimiento (\cref{fig:conocimiento}).}
+\label{tab:preguntas}
+\renewcommand{\arraystretch}{1.1}
+\begin{tabularx}{\textwidth}{@{}L{4.6cm}L{4.6cm}Y@{}}
+\toprule
+\textbf{Pregunta} & \textbf{Mecanismo} & \textbf{Por qué}\\
+\midrule
+¿Por qué subió mi factura? & Consumo + factura + RAG & Datos propios y explicación regulada\\
+¿Qué es el componente de distribución? & RAG con vigencia & Conocimiento extenso y citable\\
+¿Cuánto debo y cuándo vence? & \texttt{consultar\_factura} & Dato del cliente\\
+¿Cuánto pagaría con 10\,\% menos consumo? & \texttt{calcular\_desglose} & Cálculo determinista\\
+Quiero un acuerdo de pago & \texttt{crear\_caso} y escalar & Fuera de su autonomía\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\textbf{Éxito de negocio.} Conversaciones resueltas sin asesor, tiempo de respuesta y, la más
+honesta, tasa de reapertura: si el cliente vuelve a preguntar lo mismo por otro canal, el
+agente trasladó trabajo en vez de ahorrarlo.
+
+\subsection*{Comparación con cobranzas}
+La Ley 2300 de 2023 \citep{ley2300} solo permite contactar por canales autorizados, prohíbe
+usar varios canales en la misma semana o contactar más de una vez al día, y limita los
+horarios a lunes a viernes de 7:00 a.m. a 7:00 p.m. y sábados de 8:00 a.m. a 3:00 p.m.
+
+\begin{figure}[!htbp]
+  \centering
+  \input{figures/f14-cobranzas}
+  \caption{Flujo de cobranza: el modelo ocupa un solo paso acotado y verificado.}
+  \label{fig:cobranzas}
+\end{figure}
+
+\decision{Cobranza como flujo determinista con aprobación humana (L4).}
+{Las reglas legales no pueden depender de que un modelo ``se acuerde'' de ellas: viven en
+código y se prueban con casos deterministas. Cada paso con permisos distintos es un componente
+separado: quien lee la cartera no puede enviar.}
+{Un agente autónomo de cobranza con las reglas en su prompt.}

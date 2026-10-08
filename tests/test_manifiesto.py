@@ -56,4 +56,4 @@ def test_el_agente_pide_alias_no_modelo():
 
 def test_sin_dueno_no_hay_manifiesto():
     with pytest.raises(Exception):
-        desde_texto(_facturacion(**{"owner: lider.sac@bia.app": "owner: nadie"}))
+        desde_texto(_facturacion(**{"owner: lider.sac@energia.example": "owner: nadie"}))

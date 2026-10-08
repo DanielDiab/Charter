@@ -1,5 +1,5 @@
 ---
-titulo: Arquitectura de la plataforma de agentes de Bia
+titulo: Arquitectura de la plataforma de agentes
 dueno: equipo-ia
 vigente_desde: 2026-10-01
 clasificacion: interna
@@ -27,4 +27,4 @@ Cada petición atraviesa seis capas que ningún creador puede quitar. Uno, ident
 Hay cuatro niveles. Pública (tarifas publicadas, preguntas frecuentes): cualquier modelo del catálogo. Interna (procedimientos): proveedores con acuerdo empresarial. Confidencial (facturas, consumo, contacto de clientes): solo modelos con retención cero y acuerdo de datos, y trazas con PII enmascarada. Restringida (datos bancarios, credenciales, cédulas): nunca va al modelo; se enmascara o se resuelve dentro de una herramienta. La clasificación se decide antes que el modelo.
 
 ## Inventarios
-Los inventarios de agentes, modelos y orquestación no son hojas de cálculo: son vistas que se llenan solas desde el registro, los catálogos y las trazas. El de agentes responde cuántos hay y qué tocan; el de modelos, con qué corren; el de orquestación, qué herramientas y colecciones puede usar cada uno. Se consultan con el comando bia inventario.
+Los inventarios de agentes, modelos y orquestación no son hojas de cálculo: son vistas que se llenan solas desde el registro, los catálogos y las trazas. El de agentes responde cuántos hay y qué tocan; el de modelos, con qué corren; el de orquestación, qué herramientas y colecciones puede usar cada uno. Se consultan con el comando charter inventario. Esta documentación no lista qué modelos, herramientas, colecciones o arquetipos hay hoy ni qué agentes existen, porque eso cambia: el Arquitecto lo obtiene en vivo con las herramientas consultar_catalogo y consultar_inventario.

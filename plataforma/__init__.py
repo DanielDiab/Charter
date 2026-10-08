@@ -1,4 +1,4 @@
-"""Plataforma de agentes de Bia — prototipo del corte vertical de la propuesta.
+"""Charter: plataforma de agentes — prototipo del corte vertical de la propuesta.
 
 Ver docs/DECISIONES.md para el mapa entre el documento de arquitectura y este código.
 """

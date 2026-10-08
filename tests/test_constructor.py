@@ -18,7 +18,7 @@ def test_arbol_de_tiers_primero_el_dato():
 
 def test_de_la_entrevista_al_borrador_registrado():
     p = constructor.proponer_manifiesto(
-        id="cobranza-consulta-saldo", area="cobranzas", owner="lider.cobranzas@bia.app",
+        id="cobranza-consulta-saldo", area="cobranzas", owner="lider.cobranzas@energia.example",
         arquetipo="asistente-con-datos", proposito="Responder a clientes cuánto deben y cuándo vence su factura.",
         datos="clientes", tarea="conversacion", siempre=["ofrecer escalar a un asesor"],
         herramientas=["facturacion/consultar_factura", "soporte/crear_caso"],

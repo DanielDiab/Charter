@@ -1,0 +1,6 @@
+flowchart LR
+  C[Candidato] --> S1[Capacidades verificadas] --> S2[Suites offline] --> S3[Sombra] --> S4[Canario] --> S5[Mover alias] --> M[Monitoreo]
+  S1 -. falla .-> R[Rechazo registrado]
+  S2 -. falla .-> R
+  S3 -. falla .-> R
+  S4 -. falla .-> R

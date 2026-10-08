@@ -1,0 +1,18 @@
+\begin{tikzpicture}[x=1cm,y=1cm, cod/.style={ctrl, text width=2.25cm, minimum height=1.15cm}]
+\node[dat, text width=1.9cm, minimum height=1.15cm] (c0) at (0,0) {\textbf{Cartera vencida}\\sistema de cobro};
+\node[cod] (c1) at (2.85,0) {\textbf{Reglas Ley 2300}\\canal autorizado, horario, frecuencia};
+\node[exec, text width=2.25cm, minimum height=1.15cm] (c2) at (5.85,0) {\textbf{LLM redacta}\\tier \texttt{rapido}, dentro de plantilla};
+\node[cod] (c3) at (8.85,0) {\textbf{Validador}\\montos y fechas = sistema; tono};
+\node[neut, text width=2.1cm, minimum height=1.15cm] (c4) at (11.8,0) {\textbf{Aprobación humana}\\autonomía L4};
+\node[cod] (c5) at (14.65,0) {\textbf{Envío y registro}\\por el canal autorizado};
+\foreach \a/\b in {c0/c1,c1/c2,c2/c3,c3/c4,c4/c5}{\draw[flecha] (\a) -- (\b);}
+\node[obs, text width=2.25cm] (rp) at (2.85,-2.0) {\textbf{Reprogramar}\\fuera de ventana o ya contactado};
+\draw[flecha] (c1) -- node[etq, right]{no apto} (rp);
+\draw[flecha, draw=riskbd] (c3.south) -- ++(0,-0.55) -| node[etq, pos=0.25, below, text=riskbd]{no coincide: se regenera o se descarta} (c2.south);
+\draw[flecha, draw=riskbd] (c4.north) -- ++(0,0.5) -| node[etq, pos=0.25, above, text=riskbd]{rechazo: comentario a la plantilla} (c2.north);
+\node[plain, font=\sffamily\scriptsize\bfseries, text=docacento] at (10.2,-1.95) {El código decide el flujo; el modelo solo redacta.};
+\node[ctrl, minimum width=0.4cm, minimum height=0.25cm] (l1) at (7.2,-2.6) {};
+\node[plain, anchor=west] at (l1.east) {código determinista};
+\node[exec, minimum width=0.4cm, minimum height=0.25cm] (l2) at (10.6,-2.6) {};
+\node[plain, anchor=west] at (l2.east) {paso con LLM};
+\end{tikzpicture}

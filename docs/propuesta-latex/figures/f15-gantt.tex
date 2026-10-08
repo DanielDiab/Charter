@@ -1,0 +1,33 @@
+\begin{ganttchart}[
+    hgrid, vgrid={*{3}{draw=none},dotted},
+    x unit=0.53cm, y unit chart=0.5cm, y unit title=0.5cm,
+    title height=1, title label font=\sffamily\tiny,
+    bar label font=\sffamily\scriptsize, group label font=\sffamily\scriptsize\bfseries,
+    milestone label font=\sffamily\scriptsize\itshape\color{docacento},
+    bar/.append style={fill=execbg, draw=execbd},
+    group/.append style={fill=docink, draw=docink},
+    milestone/.append style={fill=docacento, draw=docacento},
+    bar height=0.55, group peaks height=0.2, group peaks tip position=0,
+    bar label node/.append style={align=right},
+  ]{1}{26}
+  \gantttitle{Semanas}{26}\\
+  \gantttitlelist{1,...,26}{1}\\
+  \ganttgroup{Fase 0 · Visibilidad}{1}{2}\\
+  \ganttbar{Inventario + gateway}{1}{2}\\
+  \ganttmilestone{Vista de conjunto}{2}\\
+  \ganttgroup{Fase 1 · Núcleo}{3}{8}\\
+  \ganttbar{Manifiesto, registro, runtime}{3}{6}\\
+  \ganttbar{MCP facturación y medición}{4}{7}\\
+  \ganttbar{Suites y compuerta v1}{5}{8}\\
+  \ganttbar{Migración facturación}{6}{8}\\
+  \ganttmilestone{Primer agente certificado}{8}\\
+  \ganttgroup{Fase 2 · Autoservicio}{9}{16}\\
+  \ganttbar{Constructor + Arquitecto}{9}{14}\\
+  \ganttbar{Conocimiento con vigencia}{9}{12}\\
+  \ganttbar{Evaluación en línea}{11}{16}\\
+  \ganttmilestone{Autoservicio abierto}{16}\\
+  \ganttgroup{Fase 3 · Escala}{17}{26}\\
+  \ganttbar{Flujo de cobranzas (L4)}{17}{22}\\
+  \ganttbar{Enrutamiento por costo}{19}{24}\\
+  \ganttbar{Fine-tuning (si hay señal)}{22}{26}
+\end{ganttchart}

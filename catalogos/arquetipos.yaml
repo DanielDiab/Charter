@@ -7,7 +7,7 @@
 arquetipos:
   pregunta-sobre-documentos:
     que_hace: Responde citando colecciones de conocimiento.
-    ejemplo_bia: Procedimientos internos de servicio al cliente
+    ejemplo_negocio: Procedimientos internos de servicio al cliente
     plantilla: pregunta-sobre-documentos@2
     patron: agente-unico
     # Toda respuesta sale de la documentación, así que la búsqueda la hace el
@@ -23,7 +23,7 @@ arquetipos:
 
   asistente-con-datos:
     que_hace: Conversa con el usuario usando herramientas de lectura sobre sus datos.
-    ejemplo_bia: Asistente de facturación
+    ejemplo_negocio: Asistente de facturación
     plantilla: asistente-con-datos@4
     patron: agente-unico
     autonomia_defecto: L2
@@ -37,7 +37,7 @@ arquetipos:
 
   redactor:
     que_hace: Produce textos que un humano revisa antes de enviarlos.
-    ejemplo_bia: Mensajes de cobranza (fase 3, como flujo determinista)
+    ejemplo_negocio: Mensajes de cobranza (fase 3, como flujo determinista)
     plantilla: redactor@1
     patron: flujo-determinista
     autonomia_defecto: L4
@@ -49,7 +49,7 @@ arquetipos:
 
   extractor-clasificador:
     que_hace: Convierte texto libre en datos estructurados.
-    ejemplo_bia: Resúmenes de llamadas de ventas
+    ejemplo_negocio: Resúmenes de llamadas de ventas
     plantilla: extractor-clasificador@1
     patron: agente-unico
     autonomia_defecto: L1
@@ -63,7 +63,7 @@ arquetipos:
   asistente-de-plataforma:
     interno: true
     que_hace: Guía a un empleado en el uso de la plataforma y en la creación de agentes.
-    ejemplo_bia: El Arquitecto
+    ejemplo_negocio: El Arquitecto
     plantilla: arquitecto@1
     patron: agente-unico
     # Medido en su compuerta: sin esto respondía "qué hace el gateway" de

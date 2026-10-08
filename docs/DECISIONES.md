@@ -1,7 +1,7 @@
 # Decisiones de implementación
 
 Este repositorio es la pieza ejecutable de la propuesta
-[*Agentes como configuración gobernada*](bia-arquitectura-agentes-v5.pdf). No
+[*Agentes como configuración gobernada*](propuesta-arquitectura-agentes-v5.pdf). No
 es la plataforma completa. Es un corte vertical que atraviesa todas las capas
 del documento, del manifiesto a la API, para comprobar con un modelo real que
 las decisiones de la arquitectura se sostienen.
@@ -54,11 +54,11 @@ plataforma:
 | En la propuesta | En este repositorio | Motivo |
 |---|---|---|
 | LiteLLM | `gateway.py` | La misma responsabilidad (alias, costo, tope, respaldo) sin un proxy adicional que levantar. |
-| Modelos cerrados con retención cero | Ollama local: qwen2.5 3B y 7B, qwen3 8B | El reto pide un LLM local. El costo reportado es un **costo de referencia**: el precio de un modelo comercial de tamaño equivalente, para que el presupuesto se pueda demostrar. |
-| PostgreSQL + pgvector | SQLite y un índice JSON en `.estado/` | Sin instalación; se regenera con `bia iniciar`. |
+| Modelos cerrados con retención cero | Ollama local: qwen2.5 3B y 7B, qwen3 8B | El prototipo corre 100 % local, sin llaves de API. El costo reportado es un **costo de referencia**: el precio de un modelo comercial de tamaño equivalente, para que el presupuesto se pueda demostrar. |
+| PostgreSQL + pgvector | SQLite y un índice JSON en `.estado/` | Sin instalación; se regenera con `charter iniciar`. |
 | Langfuse + OpenTelemetry | Tabla `spans` | Tiene los mismos campos que un span GenAI. Cambiar el destino es tocar una sola función. |
 | SSO corporativo | `datos/sesiones.json` | Simula lo esencial: el cliente y el dueño salen de la sesión, nunca del texto. |
-| Consola web | CLI `bia` | El mismo recorrido, sin un frontend que mantener. |
+| Consola web | CLI `charter` | El mismo recorrido, sin un frontend que mantener. |
 | Servidores MCP por HTTP | MCP por stdio | Es el mismo protocolo con otro transporte. |
 | Juez de otra familia | Juez opcional con `qwen3:8b` | Localmente solo hay modelos Qwen disponibles. |
 
@@ -163,7 +163,17 @@ para una tarea estrecha. La compuerta guió dos decisiones:
   documentos* y *asistente de plataforma* declaran `recuperar_siempre`, y el
   runtime busca antes de llamar al modelo. Es la regla del documento: donde
   importa, el flujo lo decide el código.
-- **Se publica la 1.1.0.** Este agente lee contenido que Bia no controla (por
+- **La documentación declara qué no sabe.** Buscar siempre tiene un efecto
+  secundario: si lo recuperado *parece* una respuesta, el modelo deja de
+  llamar a la herramienta con el dato vivo. Al Arquitecto le pasaba con
+  "¿qué modelos hay disponibles hoy en el catálogo?": recuperaba la sección de
+  clasificación de datos ("cualquier modelo del catálogo") y respondía con
+  eso sin llamar a `consultar_catalogo`, en todas las corridas. La corrección fue
+  en el conocimiento, no en el prompt: la sección de inventarios de
+  `plataforma-docs/arquitectura.md` dice que la lista vigente no está en la
+  documentación y qué herramienta la entrega. Pasó a 5 de 5 y la suite del
+  Arquitecto volvió a 10/10 en dos corridas completas.
+- **Se publica la 1.1.0.** Este agente lee contenido que la empresa no controla (por
   ejemplo, un foro de clientes), y el modelo de 7B resistió por sí solo la
   inyección indirecta de la suite común. Se paga 3,6 veces más por tener dos
   líneas de defensa en vez de una. Si entra al catálogo un modelo pequeño que
@@ -251,7 +261,7 @@ herramienta entrega en su `resumen`.
 
 ## 5. Resultados de la compuerta
 
-Corrida completa desde un estado limpio (`rm -rf .estado` y `bia iniciar`), 3
+Corrida completa desde un estado limpio (`rm -rf .estado` y `charter iniciar`), 3
 de octubre de 2026:
 
 | Agente | Modelo | Riesgo (umbral) | Suite propia | Seguridad | Costo por conversación | p95 |

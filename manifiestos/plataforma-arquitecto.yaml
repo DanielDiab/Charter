@@ -6,17 +6,17 @@
 # Este manifiesto define el modo de PREGUNTAS. La creación de agentes es un
 # flujo determinista del plano de control (plataforma/arquitecto.py); por qué,
 # en docs/DECISIONES.md, sección 3.6.
-apiVersion: bia.ai/v1
+apiVersion: charter/v1
 kind: Agent
 metadata:
   id: plataforma-arquitecto
   version: 1.0.0
-  owner: equipo.ia@bia.app
+  owner: equipo.ia@energia.example
   area: equipo-ia
   archetype: asistente-de-plataforma
 spec:
   purpose: >
-    Guiar a los empleados de Bia en el uso de la plataforma de agentes,
+    Guiar a los empleados de la empresa en el uso de la plataforma de agentes,
     responder preguntas sobre sus componentes y acompañarlos en la creación
     de agentes nuevos que cumplan la arquitectura.
   model: { alias: estandar, fallback: rapido }

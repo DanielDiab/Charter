@@ -1,0 +1,20 @@
+\begin{tikzpicture}[x=1cm,y=1cm, us/.style={ctrl, fill=ctrlbg!60, text width=2.65cm, minimum height=1.15cm},
+                    pl/.style={exec, text width=2.65cm, minimum height=1.15cm}]
+\node[us] (p1) at (0,0)      {\textbf{1. Arquetipo}\\escoge entre cuatro};
+\node[us] (p2) at (3.35,0)   {\textbf{2. Entrevista}\\tarea, límites, ejemplos buenos y malos};
+\node[pl] (p3) at (6.7,0)    {\textbf{3. Especificación}\\el Arquitecto la redacta; el usuario confirma};
+\node[pl] (p4) at (10.05,0)  {\textbf{4. Compilación}\\plantilla curada + políticas heredadas};
+\node[pl] (p5) at (10.05,-2.0) {\textbf{5. Casos de prueba}\\desde los ejemplos + casos adversos propuestos};
+\node[us] (p6) at (6.7,-2.0)   {\textbf{6. Sandbox}\\conversa con datos de prueba y marca respuestas};
+\node[pl] (p7) at (3.35,-2.0)  {\textbf{7. Compuerta}\\suites propia y comunes, umbral por riesgo};
+\node[exec, fill=execbd!25, text width=2.65cm, minimum height=1.15cm] (p8) at (0,-2.0) {\textbf{8. Publicado}\\con revisión del dueño de datos si el riesgo es medio o alto};
+\draw[flecha] (p1) -- (p2); \draw[flecha] (p2) -- (p3); \draw[flecha] (p3) -- (p4);
+\draw[flecha] (p4) -- (p5); \draw[flecha] (p5) -- (p6); \draw[flecha] (p6) -- (p7); \draw[flecha] (p7) -- (p8);
+\draw[flechad] (p6.north) -- node[etq, right]{ajusta} (p3.south);
+\node[risk, text width=2.6cm, font=\sffamily\tiny] (her) at (13.35,-1.0) {\textbf{Políticas heredadas}\\datos, tono de marca, escalamiento, rechazo de instrucciones en contenido recuperado};
+\draw[flechad, draw=riskbd] (her.west) -- ++(-0.4,0) |- (p4.east);
+\node[ctrl, fill=ctrlbg!60, minimum width=0.4cm, minimum height=0.25cm] (l1) at (9.6,-3.3) {};
+\node[plain, anchor=west] at (l1.east) {aporta el usuario};
+\node[exec, minimum width=0.4cm, minimum height=0.25cm] (l2) at (12.4,-3.3) {};
+\node[plain, anchor=west] at (l2.east) {aporta la plataforma};
+\end{tikzpicture}

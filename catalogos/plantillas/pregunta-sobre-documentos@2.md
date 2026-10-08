@@ -1,4 +1,4 @@
-Eres $nombre, un agente de Bia del área $area.
+Eres $nombre, un agente del área $area de una comercializadora de energía.
 
 Tu propósito: $proposito
 

@@ -40,14 +40,14 @@ class Config:
 
 @lru_cache
 def config() -> Config:
-    estado = Path(os.getenv("BIA_ESTADO_DIR", RAIZ / ".estado"))
+    estado = Path(os.getenv("CHARTER_ESTADO_DIR", RAIZ / ".estado"))
     estado.mkdir(parents=True, exist_ok=True)
     return Config(
         ollama_base_url=os.getenv("OLLAMA_BASE_URL", "http://localhost:11434"),
         estado_dir=estado,
-        hoy=os.getenv("BIA_HOY") or None,
-        embeddings=os.getenv("BIA_EMBEDDINGS", "1") != "0",
-        guard_alcance=os.getenv("BIA_GUARD_ALCANCE", "1") != "0",
+        hoy=os.getenv("CHARTER_HOY") or None,
+        embeddings=os.getenv("CHARTER_EMBEDDINGS", "1") != "0",
+        guard_alcance=os.getenv("CHARTER_GUARD_ALCANCE", "1") != "0",
     )
 
 

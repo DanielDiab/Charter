@@ -1,0 +1,14 @@
+\begin{tikzpicture}[x=1cm,y=1cm, cl/.style={base, text width=3.3cm, minimum height=1.05cm, font=\sffamily\scriptsize}]
+\foreach \x/\c/\n in {0/execbg/Pública, 3.75/ctrlbg/Interna, 7.5/obsbg/Confidencial, 11.25/riskbg/Restringida}{
+  \node[cl, fill=\c, draw=neutbd, minimum height=0.75cm, font=\sffamily\small\bfseries] at (\x,0) {\n};}
+\foreach \x/\t in {0/{tarifas publicadas, FAQ}, 3.75/{procedimientos, guías internas}, 7.5/{facturas, consumo, contacto de clientes}, 11.25/{datos bancarios, credenciales, cédulas}}{
+  \node[cl, fill=white, draw=neutbd!40] at (\x,-1.15) {\t};}
+\foreach \x/\t in {0/{cualquier tier del catálogo}, 3.75/{proveedores con acuerdo empresarial}, 7.5/{solo retención cero + acuerdo de datos}, 11.25/{\textbf{nunca} al modelo: se enmascara o va por herramienta}}{
+  \node[cl, fill=white, draw=neutbd!40] at (\x,-2.35) {\t};}
+\foreach \x/\t in {0/{completas}, 3.75/{completas}, 7.5/{PII enmascarada}, 11.25/{solo metadatos}}{
+  \node[cl, fill=white, draw=neutbd!40] at (\x,-3.55) {\t};}
+\foreach \y/\t in {-1.15/Ejemplos, -2.35/Modelos, -3.55/Trazas}{
+  \node[titulo, anchor=east] at (-1.9,\y) {\t};}
+\draw[-{Stealth[length=6pt]}, line width=1.1pt, draw=riskbd] (-1.75,0.75) -- (13.0,0.75);
+\node[font=\sffamily\tiny, text=riskbd, anchor=south east] at (13.0,0.8) {más restricción};
+\end{tikzpicture}

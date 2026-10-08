@@ -129,7 +129,7 @@ def proponer_manifiesto(id: str, area: str, owner: str, arquetipo: str, proposit
     hereda = ["red-team-base"] + (["pii-base"] if catalogo.nivel(clasif) >= catalogo.nivel("confidencial") else [])
 
     borrador = {
-        "apiVersion": "bia.ai/v1",
+        "apiVersion": "charter/v1",
         "kind": "Agent",
         "metadata": {"id": id, "version": "0.1.0", "owner": owner, "area": area, "archetype": arquetipo},
         "spec": {
@@ -226,7 +226,7 @@ def guardar_borrador(id: str) -> dict:
         "estado": estado,
         "manifiesto": str(destino.relative_to(RAIZ)),
         "suite": f"evals/{id}.yaml",
-        "siguientes_pasos": [f"bia chat {id} --sandbox", f"bia evaluar {id}", f"bia publicar {id}"],
+        "siguientes_pasos": [f"charter chat {id} --sandbox", f"charter evaluar {id}", f"charter publicar {id}"],
     }
 
 
@@ -241,7 +241,7 @@ def resumen_catalogo(tipo: str) -> dict:
         return {c: {"dueno": v["dueno"], "clasificacion": v["clasificacion"], "contenido": v["descripcion"]}
                 for c, v in catalogo.colecciones().items()}
     if tipo == "arquetipos":
-        return {a: {"que_hace": v["que_hace"], "ejemplo": v["ejemplo_bia"], "riesgo": v["riesgo_base"],
+        return {a: {"que_hace": v["que_hace"], "ejemplo": v["ejemplo_negocio"], "riesgo": v["riesgo_base"],
                     "autonomia": v["autonomia_defecto"]}
                 for a, v in catalogo.arquetipos().items() if not v.get("interno")}
     return {"error": "tipo debe ser modelos, herramientas, colecciones o arquetipos"}

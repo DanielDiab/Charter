@@ -1,0 +1,35 @@
+\begin{tikzpicture}[x=1cm,y=1cm, blk/.style={base, fill=white, draw=neutbd!60, text width=4.5cm, minimum height=0.48cm, align=left, font=\sffamily\scriptsize}, tgt/.style={text width=3.4cm, minimum height=0.62cm}]
+\node[titulo] at (0,3.55) {MANIFIESTO \texttt{sac-asistente-facturacion} v1.3};
+\foreach \i/\k/\v in {0/metadata/{dueño, área, versión},
+                     1/purpose/{para qué existe},
+                     2/model/{alias \texttt{estandar}},
+                     3/instructions/{plantilla + reglas},
+                     4/tools/{4 herramientas MCP},
+                     5/knowledge/{3 colecciones},
+                     6/data/{confidencial; sujeto de sesión},
+                     7/autonomy/{L2 colaborador},
+                     8/quality/{suite + umbral 90\,\%},
+                     9/budget/{US\$0,05 por conversación}}{
+  \node[blk] (m\i) at (0,2.85-0.62*\i) {\texttt{\textbf{\k}}: \v};
+}
+\begin{scope}[on background layer]
+\node[grupo, draw=docink, fill=neutbg, fit=(m0)(m9), inner sep=5pt] (M) {};
+\end{scope}
+\node[ctrl, tgt] (t0) at (6.6,2.85) {\textbf{Inventario de agentes}};
+\node[ctrl, tgt] (t2) at (6.6,1.6) {\textbf{Catálogo de modelos}\\resuelve el alias};
+\node[ctrl, tgt] (t4) at (6.6,0.35) {\textbf{Catálogo de herramientas}\\concede permisos};
+\node[ctrl, tgt] (t5) at (6.6,-0.85) {\textbf{Colecciones}\\filtra por vigencia};
+\node[ctrl, tgt] (t8) at (6.6,-1.95) {\textbf{Compuerta}\\corre la suite};
+\node[exec, tgt] (t9) at (6.6,-3.05) {\textbf{Gateway}\\aplica política y tope};
+\draw[flecha] (m0.east) -- (t0.west);
+\draw[flecha] (m2.east) -- (t2.west);
+\draw[flecha] (m4.east) -- (t4.west);
+\draw[flecha] (m5.east) -- (t5.west);
+\draw[flecha] (m8.east) -- (t8.west);
+\draw[flecha] (m6.east) -- (t9.west);
+\draw[flecha] (m9.east) -- (t9.west);
+\node[neut, text width=2.5cm] (b) at (-5.6,1.0) {\textbf{Constructor}\\lo genera desde la entrevista};
+\node[exec, text width=2.5cm] (r) at (-5.6,-1.2) {\textbf{Runtime}\\lo convierte en un grafo ejecutable};
+\draw[flecha] (b.east) -- (M.west |- b.east);
+\draw[flecha] (M.west |- r.east) -- (r.east);
+\end{tikzpicture}

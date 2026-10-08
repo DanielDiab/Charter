@@ -1,4 +1,4 @@
-"""Los tres inventarios que pide el reto (B.2), como vistas y no como hojas.
+"""Los tres inventarios de la propuesta, como vistas y no como hojas.
 
   agentes       ¿Cuántos hay y qué tocan?         registro + costo desde trazas
   modelos       ¿Con qué corren?                  catálogo + quién usa cada alias

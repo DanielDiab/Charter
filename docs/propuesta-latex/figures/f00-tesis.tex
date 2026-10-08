@@ -1,0 +1,17 @@
+\begin{tikzpicture}[x=1cm,y=1cm, cp/.style={ctrl, text width=2.6cm, minimum height=1.25cm}]
+\node[neut, text width=2.0cm, minimum height=1.25cm] (idea) at (0,0) {\textbf{Idea de un área}\\``quiero un agente que\ldots''};
+\node[cp] (c1) at (3.55,0) {\textbf{1. Registro}\\¿qué es, de quién es y qué toca?};
+\node[cp] (c2) at (7.05,0) {\textbf{2. Compuerta}\\¿funciona y es seguro para su riesgo?};
+\node[exec, text width=2.6cm, minimum height=1.25cm] (c3) at (10.55,0) {\textbf{3. Gateway}\\¿con qué modelo, qué datos y cuánto cuesta?};
+\node[exec, fill=execbd!30, text width=2.0cm, minimum height=1.25cm] (prod) at (14.0,0) {\textbf{Producción}\\clientes y equipos};
+\draw[flecha, line width=1.1pt, draw=docacento] (idea) -- (c1);
+\draw[flecha, line width=1.1pt, draw=docacento] (c1) -- (c2);
+\draw[flecha, line width=1.1pt, draw=docacento] (c2) -- (c3);
+\draw[flecha, line width=1.1pt, draw=docacento] (c3) -- (prod);
+\foreach \c/\t in {c1/llena el inventario\\de agentes, c2/deja evidencia\\de calidad, c3/mide costo y uso\\de datos}{
+  \node[plain, text=docacento, font=\sffamily\tiny\itshape, anchor=north] at ($(\c.south)+(0,-0.08)$) {\t};}
+\draw[decorate, decoration={brace, amplitude=5pt}, draw=docgris] ($(c1.north west)+(0,0.12)$) -- node[plain, above=5pt, text=docgris]{camino pavimentado: tres puntos de control obligatorios} ($(c3.north east)+(0,0.12)$);
+\node[risk, text width=5.2cm] (atajo) at (7.05,-2.35) {\textbf{Atajo}: herramienta externa con llaves propias\\sin llaves corporativas · sin herramientas internas · sin datos de clientes};
+\draw[flechad, draw=riskbd] (idea.south) |- (atajo.west);
+\node[circle, draw=riskbd, fill=white, text=riskbd, inner sep=0.5pt, font=\sffamily\bfseries\small] at ($(atajo.east)+(0.35,0)$) {$\times$};
+\end{tikzpicture}

@@ -1,0 +1,24 @@
+flowchart TB
+  EMP[Empleados] --> CONS
+  CAN[Canales: chat, Slack, app] --> API
+  AUT[Automatizaciones] --> API
+  subgraph CP["Plano de control"]
+    CONS[Constructor + Arquitecto] --> REG[Registro de agentes]
+    CMOD[Catálogo de modelos]
+    CORQ[Catálogo de orquestación]
+    GATE[Compuerta de evaluación]
+    POL[Identidad · políticas · presupuestos]
+  end
+  subgraph EP["Plano de ejecución"]
+    API[API de agentes compatible con OpenAI] --> RT[Runtime: guards + agente + herramientas]
+    RT --> GW[Gateway de modelos]
+    RT --> MCP[Servidores MCP]
+    RT --> KN[Servicio de conocimiento]
+  end
+  REG -. manifiesto .-> RT
+  CMOD -. alias .-> GW
+  CORQ -. permisos .-> MCP
+  GW --> PROV[Proveedores LLM]
+  MCP --> SIS[Sistemas de negocio]
+  EP --> OBS[Observabilidad: trazas, costos, evaluación en línea]
+  OBS -- señales --> GATE

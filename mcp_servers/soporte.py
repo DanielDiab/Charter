@@ -21,7 +21,7 @@ mcp = FastMCP("soporte", log_level="WARNING")
 
 
 def _archivo() -> Path:
-    estado = Path(os.getenv("BIA_ESTADO_DIR", RAIZ / ".estado"))
+    estado = Path(os.getenv("CHARTER_ESTADO_DIR", RAIZ / ".estado"))
     estado.mkdir(parents=True, exist_ok=True)
     return estado / "casos.json"
 
